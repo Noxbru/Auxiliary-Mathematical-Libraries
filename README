@@ -1,0 +1,65 @@
+/* This is a library to use matrixes in C
+ * written by Bruno Jiménez
+ * under the Catware licence && GPL licence
+ * More info of the Catware licence can be
+ * found here: http://lists.debian.org/debian-devel/1999/01/msg01921.html
+ * but it says that if you find this code useful
+ * you should pay for it petting some cats
+ * Any request or bug or anything of the code
+ * please, contact brunojimen(at)gmail(dot)com
+ */
+
+So far, we have implemented the following functions:
+
+struct matrix create_matrix(unsigned int m, unsigned int n)
+
+void get_matrix(struct matrix *m)
+
+struct matrix matrix_from_string(char *c, unsigned int m, unsigned int n)
+
+void print_matrix(struct matrix m)
+
+void fill_matrix_with(struct matrix m, float n)
+
+struct matrix multiply_matrix_by(struct matrix m, float n)
+
+struct matrix copy_matrix(struct matrix m)
+
+float * get_row(struct matrix m, unsigned int row)
+
+float * get_column(struct matrix m, unsigned int column)
+
+struct matrix identity_matrix(unsigned int n)
+
+int check_symmetric(struct matrix m)
+
+int check_antisymmetric(struct matrix m)
+
+int compare_matrix(struct matrix m1, struct matrix m2)
+
+struct matrix traspose(struct matrix m)
+
+struct matrix oposite_matrix(struct matrix m)
+
+void change_rows(struct matrix m, unsigned int row1, unsigned int row2)
+
+void change_columns(struct matrix m, unsigned int column1, unsigned int column2)
+
+float multiply_diagonal(struct matrix m)
+
+float sum_diagonal(struct matrix m)
+
+struct matrix matrix_sum(struct matrix m1, struct matrix m2)
+
+struct matrix matrix_subtraction(struct matrix m1, struct matrix m2)
+
+struct matrix matrix_multiplication(struct matrix m1, struct matrix m2)
+
+struct matrix pow_matrix(struct matrix m, unsigned int n)
+
+struct matrix gauss_elimination(struct matrix m,struct matrix n)
+
+struct matrix inverse_matrix(struct matrix m)
+
+float determinant(struct matrix m)
+
