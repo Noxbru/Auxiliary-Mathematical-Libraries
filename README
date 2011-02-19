@@ -49,6 +49,7 @@ struct matrix inverse_matrix(struct matrix m)
 float multiply_diagonal(struct matrix m)
 float sum_diagonal(struct matrix m)
 float determinant(struct matrix m)
+float sarrus(struct matrix m)
 
 === Functions to do operations with two matrixes ===
 

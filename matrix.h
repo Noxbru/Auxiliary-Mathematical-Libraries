@@ -622,3 +622,33 @@ float determinant(struct matrix m)
     }
     return factor*multiply_diagonal(c);
 }
+
+/* This function implements Sarrus rule to calculate determinants
+ * of 2x2 and 3x3 matrixes
+ * returns -1 if the matrix isn't square, 2x2 or 3x3                */
+float sarrus(struct matrix m)
+{
+    if(m.rows!=m.columns)
+    {
+        printf("Can't calculate determinant\n");
+        printf("Input matrix isn't square\n");
+        return -1;
+    }
+    if(m.rows!=2&&m.rows!=3)
+    {
+        printf("Can't calculate determinant with Sarrus rule\n");
+        printf("Input matrix is not 2x2 or 3x3\n");
+        return -1;
+    }
+
+    if(m.rows==2)
+        return m.mat[0][0]*m.mat[1][1]-m.mat[0][1]*m.mat[1][0];
+    if(m.rows==3)
+    {
+        float fac1, fac2, fac3;
+        fac1=m.mat[0][0]*(m.mat[1][1]*m.mat[2][2]-m.mat[1][2]*m.mat[2][1]);
+        fac2=m.mat[0][1]*(m.mat[1][2]*m.mat[2][0]-m.mat[1][0]*m.mat[2][2]);
+        fac3=m.mat[0][2]*(m.mat[1][0]*m.mat[2][1]-m.mat[1][1]*m.mat[2][0]);
+        return fac1+fac2+fac3;
+    }
+}
