@@ -29,6 +29,10 @@ float * get_row(struct matrix m, unsigned int row)
 
 float * get_column(struct matrix m, unsigned int column)
 
+struct matrix delete_row(struct matrix m, unsigned int n)
+
+struct matrix delete_column(struct matrix m, unsigned int n)
+
 struct matrix identity_matrix(unsigned int n)
 
 int check_symmetric(struct matrix m)

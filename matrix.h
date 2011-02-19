@@ -119,7 +119,7 @@ struct matrix multiply_matrix_by(struct matrix m, float n)
     for (i = 0; i < m.rows; i++)
         for (j = 0; j < m.columns; j++)
             c.mat[i][j]=n*m.mat[i][j];
-    return c
+    return c;
 }
 
 /* This function returns a copy of the given matrix */
@@ -139,7 +139,7 @@ struct matrix copy_matrix(struct matrix m)
  * not a copy of row                        */
 float * get_row(struct matrix m, unsigned int row)
 {
-    if(row>m.rows)
+    if(row-1>m.rows)
     {
         printf("This matrix isn't big enough\n");
         printf("To have that row\n");
@@ -160,7 +160,7 @@ float * get_row(struct matrix m, unsigned int row)
  * not a copy of column                     */
 float * get_column(struct matrix m, unsigned int column)
 {
-    if(column>m.columns)
+    if(column-1>m.columns)
     {
         printf("This matrix isn't big enough\n");
         printf("To have that column\n");
@@ -173,6 +173,58 @@ float * get_column(struct matrix m, unsigned int column)
     for (i = 0; i < m.rows; i++)
         a[i]=m.mat[i][column];
     return a;
+}
+
+/* This function returns a matrix which is the
+ * original matrix without the n-1 row
+ * Note that the row deleted is n-1 not n
+ * returns a 0x0 matrix if there isn't that
+ * row in the matrix                            */
+struct matrix delete_row(struct matrix m, unsigned int n)
+{
+    if(n-1>m.rows)
+    {
+        printf("This matrix isn't big enough\n");
+        printf("To have that row\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i,j,k;
+    struct matrix c=create_matrix(m.rows-1,m.columns);
+    for (i = 0, j = 0; i < m.rows; i++)
+        if(i!=n-1)
+        {
+            for (k = 0; k < m.columns; k++)
+                c.mat[j][k]=m.mat[i][k];
+            j++;
+        }
+    return c;
+}
+
+/* This function returns a matrix which is the
+ * original matrix without the n-1 column
+ * Note that the column deleted is n-1 not n
+ * returns a 0x0 matrix if there isn't that
+ * column in the matrix                            */
+struct matrix delete_column(struct matrix m, unsigned int n)
+{
+    if(n-1>m.columns)
+    {
+        printf("This matrix isn't big enough\n");
+        printf("To have that row\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i,j,k;
+    struct matrix c=create_matrix(m.rows,m.columns-1);
+    for (i = 0; i < m.rows; i++)
+        for (k = 0, j = 0; k < m.columns; k++)
+            if(k!=n-1)
+            {
+                c.mat[i][j]=m.mat[i][k];
+                j++;
+            }
+    return c;
 }
 
 /* This function creates an identity matrix of nth order */
@@ -261,7 +313,7 @@ struct matrix traspose(struct matrix m)
 }
 
 /* This function returns the oposite of a matrix */
-struct matrix oposite_matrix(struct matrix m)
+struct matrix  oposite(struct matrix m)
 {
     unsigned int i,j;
     struct matrix c=create_matrix(m.columns,m.rows);
@@ -413,7 +465,7 @@ struct matrix pow_matrix(struct matrix m, unsigned int n)
     }
 
     unsigned int i;
-    struct c=copy_matrix(m);
+    struct matrix c=copy_matrix(m);
     for (i = 0; i < n; i++)
         matrix_multiplication(c,m);
     return c;
