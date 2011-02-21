@@ -9,6 +9,17 @@
  * please, contact brunojimen(at)gmail(dot)com
  */
 
+The matrixes are structures with this shape:
+A pointer to an array of pointers to arrays of floats
+(the rows of the matrix) and two unsigned integers
+which are the number of rows and columns of the matrix
+
+struct matrix
+{
+    float **mat;
+    unsigned int rows, columns;
+};
+
 So far, we have implemented the following functions:
 
 === Functions to create matrixes ===
