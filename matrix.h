@@ -139,7 +139,7 @@ struct matrix copy_matrix(struct matrix m)
  * not a copy of row                        */
 float * get_row(struct matrix m, unsigned int row)
 {
-    if(row-1>m.rows)
+    if(row+1>m.rows)
     {
         printf("This matrix isn't big enough\n");
         printf("To have that row\n");
@@ -160,7 +160,7 @@ float * get_row(struct matrix m, unsigned int row)
  * not a copy of column                     */
 float * get_column(struct matrix m, unsigned int column)
 {
-    if(column-1>m.columns)
+    if(column+1>m.columns)
     {
         printf("This matrix isn't big enough\n");
         printf("To have that column\n");
@@ -182,7 +182,7 @@ float * get_column(struct matrix m, unsigned int column)
  * row in the matrix                            */
 struct matrix delete_row(struct matrix m, unsigned int n)
 {
-    if(n-1>m.rows)
+    if(n+1>m.rows)
     {
         printf("This matrix isn't big enough\n");
         printf("To have that row\n");
@@ -208,7 +208,7 @@ struct matrix delete_row(struct matrix m, unsigned int n)
  * column in the matrix                            */
 struct matrix delete_column(struct matrix m, unsigned int n)
 {
-    if(n-1>m.columns)
+    if(n+1>m.columns)
     {
         printf("This matrix isn't big enough\n");
         printf("To have that row\n");
@@ -224,6 +224,102 @@ struct matrix delete_column(struct matrix m, unsigned int n)
                 c.mat[i][j]=m.mat[i][k];
                 j++;
             }
+    return c;
+}
+
+/* This function returns a matrix with the n-1th row replaced 
+ * with the contents of a
+ * Note that it doesn't check if a has enough elements or if
+ * it is longer than the row size in m, in this case,
+ * only the elements of a that fit in the row are used
+ * returns a 0x0 matrix if there isn't that row in the matrix */
+struct matrix replace_row(struct matrix m, unsigned int n, float * a)
+{
+    if(n+1>m.rows)
+    {
+        printf("This matrix isn't big enough\n");
+        printf("To have that row\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i;
+    struct matrix c=copy_matrix(m);
+    for (i = 0; i < m.columns; i++)
+        c.mat[n][i]=a[i];
+    return c;
+}
+
+/* This function returns a matrix with the n-1th row replaced 
+ * with the contents of a
+ * Note that it doesn't check if a has less than num elements
+ * if num is less than the row size, the remaining elements
+ * are filled with 0s
+ * if num is bigger than the row size in m, in this case,
+ * only the elements of a that fit in the row are used
+ * returns a 0x0 matrix if there isn't that row in the matrix */
+struct matrix n_replace_row(struct matrix m, unsigned int n, float * a, unsigned int num)
+{
+    if(n+1>m.rows)
+    {
+        printf("This matrix isn't big enough\n");
+        printf("To have that row\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i;
+    struct matrix c=copy_matrix(m);
+    for (i = 0; i < num; i++)
+        c.mat[n][i]=a[i];
+    for ( ; i < m.columns; i++)
+        c.mat[n][i]=0;
+    return c;
+}
+
+/* This function returns a matrix with the n-1th column replaced 
+ * with the contents of a
+ * Note that it doesn't check if a has enough elements or if
+ * it is longer than the column size in m, in this case,
+ * only the elements of a that fit in the column are used
+ * returns a 0x0 matrix if there isn't that column in the matrix */
+struct matrix replace_column(struct matrix m, unsigned int n, float * a)
+{
+    if(n+1>m.columns)
+    {
+        printf("This matrix isn't big enough\n");
+        printf("To have that column\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i;
+    struct matrix c=copy_matrix(m);
+    for (i = 0; i < m.rows; i++)
+        c.mat[i][n]=a[i];
+    return c;
+}
+
+/* This function returns a matrix with the n-1th column replaced 
+ * with the contents of a
+ * Note that it doesn't check if a has less than num elements
+ * if num is less than the column size, the remaining elements
+ * are filled with 0s
+ * if num is bigger than the column size in m, in this case,
+ * only the elements of a that fit in the column are used
+ * returns a 0x0 matrix if there isn't that column in the matrix */
+struct matrix n_replace_column(struct matrix m, unsigned int n, float * a, unsigned int num)
+{
+    if(n+1>m.columns)
+    {
+        printf("This matrix isn't big enough\n");
+        printf("To have that row\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i;
+    struct matrix c=copy_matrix(m);
+    for (i = 0; i < num; i++)
+        c.mat[i][n]=a[i];
+    for ( ; i < m.columns; i++)
+        c.mat[i][n]=0;
     return c;
 }
 
