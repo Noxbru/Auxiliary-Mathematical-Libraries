@@ -25,7 +25,7 @@ So far, we have implemented the following functions:
 === Functions to create matrixes ===
 
 struct matrix create_matrix(unsigned int m, unsigned int n)
-void get_matrix(struct matrix *m)
+struct matrix get_matrix()
 struct matrix matrix_from_string(char *c, unsigned int m, unsigned int n)
 struct matrix copy_matrix(struct matrix m)
 struct matrix identity_matrix(unsigned int n)

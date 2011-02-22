@@ -38,22 +38,21 @@ struct matrix create_matrix(unsigned int m, unsigned int n)
 }
 
 /* This function ask for a matrix from keyboard */
-void get_matrix(struct matrix *m)
+struct matrix get_matrix(void)
 {
     unsigned int i,j;
     printf("Please, insert number of rows of the matrix\n");
-    scanf("%u",&m->rows);
-    m->mat=malloc(m->rows*sizeof(float *));
+    scanf("%u",&i);
     printf("Please, insert number of columns of the matrix\n");
-    scanf("%u",&m->columns);
-    for (i = 0; i < m->rows; i++)
-        m->mat[i]=malloc(m->columns*sizeof(float));
-    for (i = 0; i < m->rows; i++)
-        for (j = 0; j < m->columns; j++)
+    scanf("%u",&j);
+    struct matrix m=create_matrix(i,j);
+    for (i = 0; i < m.rows; i++)
+        for (j = 0; j < m.columns; j++)
         {
             printf("Please, insert the %u,%u component of the matrix\n",i+1,j+1);
-            scanf("%f",&m->mat[i][j]);
+            scanf("%f",&m.mat[i][j]);
         }
+    return m;
 }
 
 /* This function is used to create a matrix from a string
@@ -409,7 +408,7 @@ struct matrix traspose(struct matrix m)
 }
 
 /* This function returns the oposite of a matrix */
-struct matrix  oposite(struct matrix m)
+struct matrix oposite(struct matrix m)
 {
     unsigned int i,j;
     struct matrix c=create_matrix(m.columns,m.rows);
