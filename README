@@ -57,6 +57,8 @@ struct matrix replace_column(struct matrix m, unsigned int n, float * a)
 struct matrix n_replace_row(struct matrix m, unsigned int n, float * a, unsigned int num)
 struct matrix n_replace_column(struct matrix m, unsigned int n, float * a, unsigned int num)
 
+struct matrix minor_matrix(struct matrix m, unsigned int i, unsigned int j)
+
 struct matrix traspose(struct matrix m)
 struct matrix oposite_matrix(struct matrix m)
 struct matrix inverse_matrix(struct matrix m)
@@ -65,6 +67,7 @@ float multiply_diagonal(struct matrix m)
 float sum_diagonal(struct matrix m)
 float determinant(struct matrix m)
 float sarrus(struct matrix m)
+float determinant_laplace(struct matrix m)
 
 === Functions to do operations with two matrixes ===
 

@@ -191,7 +191,7 @@ struct matrix delete_row(struct matrix m, unsigned int n)
     unsigned int i,j,k;
     struct matrix c=create_matrix(m.rows-1,m.columns);
     for (i = 0, j = 0; i < m.rows; i++)
-        if(i!=n-1)
+        if(i!=n)
         {
             for (k = 0; k < m.columns; k++)
                 c.mat[j][k]=m.mat[i][k];
@@ -218,11 +218,27 @@ struct matrix delete_column(struct matrix m, unsigned int n)
     struct matrix c=create_matrix(m.rows,m.columns-1);
     for (i = 0; i < m.rows; i++)
         for (k = 0, j = 0; k < m.columns; k++)
-            if(k!=n-1)
+            if(k!=n)
             {
                 c.mat[i][j]=m.mat[i][k];
                 j++;
             }
+    return c;
+}
+
+/* This function returns a matrix which is the
+ * original matrix without the i-1 row and j-1
+ * column
+ * Note that the row & column deleted are i-1
+ * and j-1, not i nor j
+ * returns a 0x0 matrix if there isn't that row
+ * or column in the matrix (checked by the other
+ * functions)                                   */
+struct matrix minor_matrix(struct matrix m, unsigned int i, unsigned int j)
+{
+    struct matrix c=copy_matrix(m);
+    c=delete_row(m,i);
+    c=delete_column(c,j);
     return c;
 }
 
@@ -746,4 +762,31 @@ float sarrus(struct matrix m)
         fac3=m.mat[0][2]*(m.mat[1][0]*m.mat[2][1]-m.mat[1][1]*m.mat[2][0]);
         return fac1+fac2+fac3;
     }
+}
+
+/* This function calculates the determinant of a matrix using
+ * the Laplace expansion
+ * returns -1 if the matrix isn't square                        */
+float determinant_laplace(struct matrix m)
+{
+    if(m.rows!=m.columns)
+    {
+        printf("Can't calculate determinant\n");
+        printf("Input matrix isn't square\n");
+        return -1;
+    }
+    if(m.rows==2||m.rows==3)
+        return sarrus(m);
+
+    unsigned int i;
+    float det=0;
+    for (i = 0; i < m.columns; i++)
+    {
+        if(m.mat[0][i]!=0)
+            if(i%2==0)
+                det+=m.mat[0][i]*determinant_laplace(minor_matrix(m,0,i));
+            else
+                det-=m.mat[0][i]*determinant_laplace(minor_matrix(m,0,i));
+    }
+    return det;
 }
