@@ -232,13 +232,28 @@ struct matrix delete_column(struct matrix m, unsigned int n)
  * Note that the row & column deleted are i-1
  * and j-1, not i nor j
  * returns a 0x0 matrix if there isn't that row
- * or column in the matrix (checked by the other
- * functions)                                   */
-struct matrix minor_matrix(struct matrix m, unsigned int i, unsigned int j)
+ * or column in the matrix                      */
+struct matrix minor_matrix(struct matrix m, unsigned int row, unsigned int column)
 {
-    struct matrix c=copy_matrix(m);
-    c=delete_row(m,i);
-    c=delete_column(c,j);
+    if(row+1>m.rows||column+1>m.columns)
+    {
+        printf("Matrix isn't big enough\n");
+        printf("to have that element\n");
+        return create_matrix(0,0);
+    }
+    struct matrix c=create_matrix(m.rows-1,m.columns-1);
+    unsigned int i,j,k,l;
+    for (i = 0, k = 0; i < m.rows; i++)
+        if(i!=row)
+        {
+            for (j = 0, l = 0; j < m.columns; j++)
+                if(j!=column)
+                {
+                    c.mat[k][l]=m.mat[i][j];
+                    l++;
+                }
+            k++;
+    }
     return c;
 }
 
