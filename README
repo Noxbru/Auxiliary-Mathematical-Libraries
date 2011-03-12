@@ -38,6 +38,7 @@ void print_matrix(struct matrix m)
 
 int check_symmetric(struct matrix m)
 int check_antisymmetric(struct matrix m)
+int check_orthogonal(struct matrix m)
 int compare_matrix(struct matrix m1, struct matrix m2)
 
 === Funtions to do operations on one single matrix ===

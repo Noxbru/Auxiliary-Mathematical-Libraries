@@ -403,6 +403,23 @@ int check_antisymmetric(struct matrix m)
     return 1;
 }
 
+/*This function checks if a matrix is orthogonal
+ * returns -1 if it can't be checked
+ * returns 0 if it isn't orthogonal
+ * returns 1 if it is orthogonal                */
+int check_orthogonal(struct matrix m)
+{
+    if(m.rows!=m.columns)
+    {
+        printf("This matrix isn't square\n");
+        return -1;
+    }
+
+    struct matrix c=traspose(m);
+    c=matrix_multiplication(m,c);
+    return compare_matrix(c,identity_matrix(c.rows));
+}
+
 /* This function compares two matrixes
  * returns -1 if they can't be compared
  * returns  0 if they are different
