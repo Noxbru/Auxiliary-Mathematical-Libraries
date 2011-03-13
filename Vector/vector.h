@@ -190,8 +190,10 @@ float module(struct vector v)
  * an input vector                              */
 struct vector unitary_vector(struct vector v)
 {
-    struct vector w=create_vector(v.dimension);
     float aux=module(v);
+    if(aux==1)
+        return copy_vector(v);
+    struct vector w=create_vector(v.dimension);
     unsigned int i;
     for (i = 0; i < v.dimension; i++)
         w.vec[i]=v.vec[i]/aux;
@@ -273,5 +275,43 @@ struct vector vectorial_product(struct vector v1, struct vector v2)
     w.vec[0]=v1.vec[1]*v2.vec[2]-v1.vec[2]*v2.vec[1];
     w.vec[1]=v1.vec[2]*v2.vec[0]-v1.vec[0]*v2.vec[2];
     w.vec[2]=v1.vec[0]*v2.vec[1]-v1.vec[1]*v2.vec[0];
+    return w;
+}
+
+/**/
+struct vector projection_along(struct vector v1, struct vector v2)
+{
+    if(v1.dimension!=v2.dimension)
+    {
+        printf("These vectors doesn't have the same size\n");
+        printf("Imposible calculate the projection");
+    }
+
+    struct vector w=unitary_vector(v1);
+    float aux=scalar_product(v1,v2)/module(v1);
+    w=multiply_vector_by(v1,aux);
+    return w;
+}
+
+/* This function transforms a set of vectors into
+ * an orthonormal set: an orthonormal base          */
+struct vector * gram_schmidt(struct vector *v, unsigned int n)
+{
+    struct vector *w;
+    w=malloc(n*sizeof(struct vector));
+    w[0]=unitary_vector(v[0]);
+
+    unsigned int i,j;
+    struct vector aux;
+    for (i = 1; i < n; i++)
+    {
+        w[i]=copy_vector(v[i]);
+        for (j = 0; j < i; j++)
+        {
+            aux=projection_along(w[j],v[i])
+            w[i]=vector_subtraction(w[i],aux);
+        }
+        w[i]=unitary_vector(w[i]);
+    }
     return w;
 }
