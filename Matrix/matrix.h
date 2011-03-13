@@ -89,6 +89,27 @@ struct matrix matrix_from_string(char *c, unsigned int m, unsigned int n)
     return a;
 }
 
+/* This function returns a copy of the given matrix */
+struct matrix copy_matrix(struct matrix m)
+{
+    unsigned int i,j;
+    struct matrix c=create_matrix(m.rows,m.columns);
+    for (i = 0; i < c.rows; i++)
+        for (j = 0; j < c.columns; j++)
+            c.mat[i][j]=m.mat[i][j];
+    return c;
+}
+
+/* This function creates an identity matrix of nth order */
+struct matrix identity_matrix(unsigned int n)
+{
+    struct matrix c=create_matrix(n,n);
+    unsigned int i;
+    for (i = 0; i < n; i++)
+        c.mat[i][i]=1;
+    return c;
+}
+
 /* This function prints a matrix */
 void print_matrix(struct matrix m)
 {
@@ -99,6 +120,84 @@ void print_matrix(struct matrix m)
             printf("%f\t",m.mat[i][j]);
         printf("\n");
     }
+}
+
+/* This function checks if a matrix is symmetric
+ * returns -1 if it can't be checked
+ * returns  0 if it isn't symmetric
+ * returns  1 if it is symmetric                */
+int check_symmetric(struct matrix m)
+{
+    if(m.rows!=m.columns)
+    {
+        printf("This matrix isn't square\n");
+        return -1;
+    }
+
+    unsigned int i,j;
+    for (i = 1; i < m.rows; i++)
+        for (j = i; j < m.columns; j++)
+            if(m.mat[i][j]!=m.mat[j][i])
+                return 0;
+    return 1;
+}
+
+/* This function checks if a matrix is anti-symmetric
+ * returns -1 if it can't be checked
+ * returns  0 if it isn't anti-symmetric
+ * returns  1 if it is anti-symmetric                  */
+int check_antisymmetric(struct matrix m)
+{
+    if(m.rows!=m.columns)
+    {
+        printf("This matrix isn't square\n");
+        return -1;
+    }
+
+    unsigned int i,j;
+    for (i = 1; i < m.rows; i++)
+        for (j = i; j < m.columns; j++)
+            if(m.mat[i][j]!=-m.mat[j][i])
+                return 0;
+    return 1;
+}
+
+/*This function checks if a matrix is orthogonal
+ * returns -1 if it can't be checked
+ * returns 0 if it isn't orthogonal
+ * returns 1 if it is orthogonal                */
+int check_orthogonal(struct matrix m)
+{
+    if(m.rows!=m.columns)
+    {
+        printf("This matrix isn't square\n");
+        return -1;
+    }
+
+    struct matrix c=traspose(m);
+    c=matrix_multiplication(m,c);
+    return compare_matrix(c,identity_matrix(c.rows));
+}
+
+/* This function compares two matrixes
+ * returns -1 if they can't be compared
+ * returns  0 if they are different
+ * returns  1 if they are the same matrix */
+int compare_matrix(struct matrix m1, struct matrix m2)
+{
+    if(m1.rows!=m2.rows||m1.columns!=m2.columns)
+    {
+        printf("These matrixes can't be compared\n");
+        printf("They don't have the same size\n");
+        return -1;
+    }
+
+    unsigned int i,j;
+    for (i = 0; i < m1.rows; i++)
+        for (j = 0; j < m1.columns; j++)
+            if(m1.mat[i][j]!=m2.mat[i][j])
+                return 0;
+    return 1;
 }
 
 /* This function fills a matrix with a float */
@@ -121,14 +220,21 @@ struct matrix multiply_matrix_by(struct matrix m, float n)
     return c;
 }
 
-/* This function returns a copy of the given matrix */
-struct matrix copy_matrix(struct matrix m)
+/* This function returns the matrix m elevated to the nth
+ * power by multiplying                                     */
+struct matrix pow_matrix(struct matrix m, unsigned int n)
 {
-    unsigned int i,j;
-    struct matrix c=create_matrix(m.rows,m.columns);
-    for (i = 0; i < c.rows; i++)
-        for (j = 0; j < c.columns; j++)
-            c.mat[i][j]=m.mat[i][j];
+    if(m.rows!=m.columns)
+    {
+        printf("This matrix can't be powered\n");
+        printf("It isn't square\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i;
+    struct matrix c=copy_matrix(m);
+    for (i = 0; i < n; i++)
+        matrix_multiplication(c,m);
     return c;
 }
 
@@ -226,246 +332,6 @@ struct matrix delete_column(struct matrix m, unsigned int n)
     return c;
 }
 
-/* This function returns a matrix which is the
- * original matrix without the i-1 row and j-1
- * column
- * Note that the row & column deleted are i-1
- * and j-1, not i nor j
- * returns a 0x0 matrix if there isn't that row
- * or column in the matrix                      */
-struct matrix minor_matrix(struct matrix m, unsigned int row, unsigned int column)
-{
-    if(row+1>m.rows||column+1>m.columns)
-    {
-        printf("Matrix isn't big enough\n");
-        printf("to have that element\n");
-        return create_matrix(0,0);
-    }
-    struct matrix c=create_matrix(m.rows-1,m.columns-1);
-    unsigned int i,j,k,l;
-    for (i = 0, k = 0; i < m.rows; i++)
-        if(i!=row)
-        {
-            for (j = 0, l = 0; j < m.columns; j++)
-                if(j!=column)
-                {
-                    c.mat[k][l]=m.mat[i][j];
-                    l++;
-                }
-            k++;
-    }
-    return c;
-}
-
-/* This function returns a matrix with the n-1th row replaced 
- * with the contents of a
- * Note that it doesn't check if a has enough elements or if
- * it is longer than the row size in m, in this case,
- * only the elements of a that fit in the row are used
- * returns a 0x0 matrix if there isn't that row in the matrix */
-struct matrix replace_row(struct matrix m, unsigned int n, float * a)
-{
-    if(n+1>m.rows)
-    {
-        printf("This matrix isn't big enough\n");
-        printf("To have that row\n");
-        return create_matrix(0,0);
-    }
-
-    unsigned int i;
-    struct matrix c=copy_matrix(m);
-    for (i = 0; i < m.columns; i++)
-        c.mat[n][i]=a[i];
-    return c;
-}
-
-/* This function returns a matrix with the n-1th row replaced 
- * with the contents of a
- * Note that it doesn't check if a has less than num elements
- * if num is less than the row size, the remaining elements
- * are filled with 0s
- * if num is bigger than the row size in m, in this case,
- * only the elements of a that fit in the row are used
- * returns a 0x0 matrix if there isn't that row in the matrix */
-struct matrix n_replace_row(struct matrix m, unsigned int n, float * a, unsigned int num)
-{
-    if(n+1>m.rows)
-    {
-        printf("This matrix isn't big enough\n");
-        printf("To have that row\n");
-        return create_matrix(0,0);
-    }
-
-    unsigned int i;
-    struct matrix c=copy_matrix(m);
-    for (i = 0; i < num; i++)
-        c.mat[n][i]=a[i];
-    for ( ; i < m.columns; i++)
-        c.mat[n][i]=0;
-    return c;
-}
-
-/* This function returns a matrix with the n-1th column replaced 
- * with the contents of a
- * Note that it doesn't check if a has enough elements or if
- * it is longer than the column size in m, in this case,
- * only the elements of a that fit in the column are used
- * returns a 0x0 matrix if there isn't that column in the matrix */
-struct matrix replace_column(struct matrix m, unsigned int n, float * a)
-{
-    if(n+1>m.columns)
-    {
-        printf("This matrix isn't big enough\n");
-        printf("To have that column\n");
-        return create_matrix(0,0);
-    }
-
-    unsigned int i;
-    struct matrix c=copy_matrix(m);
-    for (i = 0; i < m.rows; i++)
-        c.mat[i][n]=a[i];
-    return c;
-}
-
-/* This function returns a matrix with the n-1th column replaced 
- * with the contents of a
- * Note that it doesn't check if a has less than num elements
- * if num is less than the column size, the remaining elements
- * are filled with 0s
- * if num is bigger than the column size in m, in this case,
- * only the elements of a that fit in the column are used
- * returns a 0x0 matrix if there isn't that column in the matrix */
-struct matrix n_replace_column(struct matrix m, unsigned int n, float * a, unsigned int num)
-{
-    if(n+1>m.columns)
-    {
-        printf("This matrix isn't big enough\n");
-        printf("To have that row\n");
-        return create_matrix(0,0);
-    }
-
-    unsigned int i;
-    struct matrix c=copy_matrix(m);
-    for (i = 0; i < num; i++)
-        c.mat[i][n]=a[i];
-    for ( ; i < m.columns; i++)
-        c.mat[i][n]=0;
-    return c;
-}
-
-/* This function creates an identity matrix of nth order */
-struct matrix identity_matrix(unsigned int n)
-{
-    struct matrix c=create_matrix(n,n);
-    unsigned int i;
-    for (i = 0; i < n; i++)
-        c.mat[i][i]=1;
-    return c;
-}
-
-/* This function checks if a matrix is symmetric
- * returns -1 if it can't be checked
- * returns  0 if it isn't symmetric
- * returns  1 if it is symmetric                */
-int check_symmetric(struct matrix m)
-{
-    if(m.rows!=m.columns)
-    {
-        printf("This matrix isn't square\n");
-        return -1;
-    }
-
-    unsigned int i,j;
-    for (i = 1; i < m.rows; i++)
-        for (j = i; j < m.columns; j++)
-            if(m.mat[i][j]!=m.mat[j][i])
-                return 0;
-    return 1;
-}
-
-/* This function checks if a matrix is anti-symmetric
- * returns -1 if it can't be checked
- * returns  0 if it isn't anti-symmetric
- * returns  1 if it is anti-symmetric                  */
-int check_antisymmetric(struct matrix m)
-{
-    if(m.rows!=m.columns)
-    {
-        printf("This matrix isn't square\n");
-        return -1;
-    }
-
-    unsigned int i,j;
-    for (i = 1; i < m.rows; i++)
-        for (j = i; j < m.columns; j++)
-            if(m.mat[i][j]!=-m.mat[j][i])
-                return 0;
-    return 1;
-}
-
-/*This function checks if a matrix is orthogonal
- * returns -1 if it can't be checked
- * returns 0 if it isn't orthogonal
- * returns 1 if it is orthogonal                */
-int check_orthogonal(struct matrix m)
-{
-    if(m.rows!=m.columns)
-    {
-        printf("This matrix isn't square\n");
-        return -1;
-    }
-
-    struct matrix c=traspose(m);
-    c=matrix_multiplication(m,c);
-    return compare_matrix(c,identity_matrix(c.rows));
-}
-
-/* This function compares two matrixes
- * returns -1 if they can't be compared
- * returns  0 if they are different
- * returns  1 if they are the same matrix */
-int compare_matrix(struct matrix m1, struct matrix m2)
-{
-    if(m1.rows!=m2.rows||m1.columns!=m2.columns)
-    {
-        printf("These matrixes can't be compared\n");
-        printf("They don't have the same size\n");
-        return -1;
-    }
-
-    unsigned int i,j;
-    for (i = 0; i < m1.rows; i++)
-        for (j = 0; j < m1.columns; j++)
-            if(m1.mat[i][j]!=m2.mat[i][j])
-                return 0;
-    return 1;
-}
-
-/* This function returns the traspose of a matrix */
-struct matrix traspose(struct matrix m)
-{
-    unsigned int i,j;
-    struct matrix c=create_matrix(m.columns,m.rows);
-    for (i = 0; i < m.rows-1; i++)
-        for (j = i+1; j < m.columns; j++)
-        {
-            c.mat[j][i]=m.mat[i][j];
-            c.mat[i][j]=m.mat[j][i];
-        }
-    return c;
-}
-
-/* This function returns the oposite of a matrix */
-struct matrix oposite(struct matrix m)
-{
-    unsigned int i,j;
-    struct matrix c=create_matrix(m.columns,m.rows);
-    for (i = 0; i < m.rows; i++)
-        for (j = 0; j < m.columns; j++)
-            c.mat[i][j]=-m.mat[i][j];
-    return c;
-}
-
 /* This function changes two rows */
 void change_rows(struct matrix m, unsigned int row1, unsigned int row2)
 {
@@ -502,6 +368,173 @@ void change_columns(struct matrix m, unsigned int column1, unsigned int column2)
     }
 }
 
+/* This function returns a matrix with the n-1th row replaced 
+ * with the contents of a
+ * Note that it doesn't check if a has enough elements or if
+ * it is longer than the row size in m, in this case,
+ * only the elements of a that fit in the row are used
+ * returns a 0x0 matrix if there isn't that row in the matrix */
+struct matrix replace_row(struct matrix m, unsigned int n, float * a)
+{
+    if(n+1>m.rows)
+    {
+        printf("This matrix isn't big enough\n");
+        printf("To have that row\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i;
+    struct matrix c=copy_matrix(m);
+    for (i = 0; i < m.columns; i++)
+        c.mat[n][i]=a[i];
+    return c;
+}
+
+/* This function returns a matrix with the n-1th column replaced 
+ * with the contents of a
+ * Note that it doesn't check if a has enough elements or if
+ * it is longer than the column size in m, in this case,
+ * only the elements of a that fit in the column are used
+ * returns a 0x0 matrix if there isn't that column in the matrix */
+struct matrix replace_column(struct matrix m, unsigned int n, float * a)
+{
+    if(n+1>m.columns)
+    {
+        printf("This matrix isn't big enough\n");
+        printf("To have that column\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i;
+    struct matrix c=copy_matrix(m);
+    for (i = 0; i < m.rows; i++)
+        c.mat[i][n]=a[i];
+    return c;
+}
+
+/* This function returns a matrix with the n-1th row replaced 
+ * with the contents of a
+ * Note that it doesn't check if a has less than num elements
+ * if num is less than the row size, the remaining elements
+ * are filled with 0s
+ * if num is bigger than the row size in m, in this case,
+ * only the elements of a that fit in the row are used
+ * returns a 0x0 matrix if there isn't that row in the matrix */
+struct matrix n_replace_row(struct matrix m, unsigned int n, float * a, unsigned int num)
+{
+    if(n+1>m.rows)
+    {
+        printf("This matrix isn't big enough\n");
+        printf("To have that row\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i;
+    struct matrix c=copy_matrix(m);
+    for (i = 0; i < num; i++)
+        c.mat[n][i]=a[i];
+    for ( ; i < m.columns; i++)
+        c.mat[n][i]=0;
+    return c;
+}
+
+/* This function returns a matrix with the n-1th column replaced 
+ * with the contents of a
+ * Note that it doesn't check if a has less than num elements
+ * if num is less than the column size, the remaining elements
+ * are filled with 0s
+ * if num is bigger than the column size in m, in this case,
+ * only the elements of a that fit in the column are used
+ * returns a 0x0 matrix if there isn't that column in the matrix */
+struct matrix n_replace_column(struct matrix m, unsigned int n, float * a, unsigned int num)
+{
+    if(n+1>m.columns)
+    {
+        printf("This matrix isn't big enough\n");
+        printf("To have that row\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i;
+    struct matrix c=copy_matrix(m);
+    for (i = 0; i < num; i++)
+        c.mat[i][n]=a[i];
+    for ( ; i < m.columns; i++)
+        c.mat[i][n]=0;
+    return c;
+}
+
+/* This function returns a matrix which is the
+ * original matrix without the i-1 row and j-1
+ * column
+ * Note that the row & column deleted are i-1
+ * and j-1, not i nor j
+ * returns a 0x0 matrix if there isn't that row
+ * or column in the matrix                      */
+struct matrix minor_matrix(struct matrix m, unsigned int row, unsigned int column)
+{
+    if(row+1>m.rows||column+1>m.columns)
+    {
+        printf("Matrix isn't big enough\n");
+        printf("to have that element\n");
+        return create_matrix(0,0);
+    }
+    struct matrix c=create_matrix(m.rows-1,m.columns-1);
+    unsigned int i,j,k,l;
+    for (i = 0, k = 0; i < m.rows; i++)
+        if(i!=row)
+        {
+            for (j = 0, l = 0; j < m.columns; j++)
+                if(j!=column)
+                {
+                    c.mat[k][l]=m.mat[i][j];
+                    l++;
+                }
+            k++;
+    }
+    return c;
+}
+
+/* This function returns the traspose of a matrix */
+struct matrix traspose(struct matrix m)
+{
+    unsigned int i,j;
+    struct matrix c=create_matrix(m.columns,m.rows);
+    for (i = 0; i < m.rows-1; i++)
+        for (j = i+1; j < m.columns; j++)
+        {
+            c.mat[j][i]=m.mat[i][j];
+            c.mat[i][j]=m.mat[j][i];
+        }
+    return c;
+}
+
+/* This function returns the oposite of a matrix */
+struct matrix oposite(struct matrix m)
+{
+    unsigned int i,j;
+    struct matrix c=create_matrix(m.columns,m.rows);
+    for (i = 0; i < m.rows; i++)
+        for (j = 0; j < m.columns; j++)
+            c.mat[i][j]=-m.mat[i][j];
+    return c;
+}
+
+/* This function returns the inverse of a matrix using
+ * the gauss elimination algorithm with an identity matrix
+ * returns a 0x0 matrix if the given matrix isn't square    */
+struct matrix inverse_matrix(struct matrix m)
+{
+    if(m.rows!=m.columns)
+    {
+        printf("Impossible to find inverse matrix\n");
+        printf("Imput matrix not square\n");
+        return create_matrix(0,0);
+    }
+
+    return gauss_elimination(m,identity_matrix(m.rows));
+}
+
 /* This function returns the product of the diagonal of the matrix
  * returns -1 if the matrix isn't square                             */
 float multiply_diagonal(struct matrix m)
@@ -536,184 +569,6 @@ float sum_diagonal(struct matrix m)
     for (i = 0; i < m.rows; i++)
         aux+=m.mat[i][i];
     return aux;
-}
-
-/* This function returns the sum of two matrixes
- * returns a 0x0 matrix if they can't be summed */
-struct matrix matrix_sum(struct matrix m1, struct matrix m2)
-{
-    if(m1.rows!=m2.rows||m1.columns!=m2.columns)
-    {
-        printf("These matrixes doesn't have the same size\n");
-        printf("Imposible to sum them.\n");
-        return create_matrix(0,0);
-    }
-
-    unsigned int i,j;
-    struct matrix c=create_matrix(m1.rows,m1.columns);
-    for (i = 0; i < m1.rows; i++)
-        for (j = 0; j < m1.columns; j++)
-            c.mat[i][j]=m1.mat[i][j]+m2.mat[i][j];
-    return c;
-}
-
-/* This function returns the subtraction of two matrixes
- * returns a 0x0 matrix if they can't be summed */
-struct matrix matrix_subtraction(struct matrix m1, struct matrix m2)
-{
-    if(m1.rows!=m2.rows||m1.columns!=m2.columns)
-    {
-        printf("These matrixes doesn't have the same size\n");
-        printf("Imposible to subtract them.\n");
-        return create_matrix(0,0);
-    }
-
-    unsigned int i,j;
-    struct matrix c=create_matrix(m1.rows,m1.columns);
-    for (i = 0; i < m1.rows; i++)
-        for (j = 0; j < m1.columns; j++)
-            c.mat[i][j]=m1.mat[i][j]-m2.mat[i][j];
-    return c;
-}
-
-/* This function returns the multiplication of two matrixes
- * returns a 0x0 matrix if they can't be multiplied         */
-struct matrix matrix_multiplication(struct matrix m1, struct matrix m2)
-{
-    if(m1.columns!=m2.rows)
-    {
-        printf("These matrixes can't be multiplied\n");
-        printf("They don't have the right size\n");
-        return create_matrix(0,0);
-    }
-
-    unsigned int i,j,k;
-    struct matrix c=create_matrix(m1.rows,m2.columns);
-    for (i = 0; i < m1.rows; i++)
-        for (j = 0; j < m2.columns; j++)
-            for (k = 0; k < m1.columns; k++)
-                c.mat[i][j]+=m1.mat[i][k]*m2.mat[k][j];
-    return c;
-}
-
-/* This function returns the matrix m elevated to the nth
- * power by multiplying                                     */
-struct matrix pow_matrix(struct matrix m, unsigned int n)
-{
-    if(m.rows!=m.columns)
-    {
-        printf("This matrix can't be powered\n");
-        printf("It isn't square\n");
-        return create_matrix(0,0);
-    }
-
-    unsigned int i;
-    struct matrix c=copy_matrix(m);
-    for (i = 0; i < n; i++)
-        matrix_multiplication(c,m);
-    return c;
-}
-
-/* This function implements the gauss elimination algorithm
- * in a given matrix and a second matrix with the independient
- * coeficients.
- * Note that you pass a matrix as the second argument, so you
- * can solve several linear equations with the same form at
- * the same time.
- * returns a 0x0 matrix if the matrixes have different number
- * of rows.                                                     */
-struct matrix gauss_elimination(struct matrix m,struct matrix n)
-{
-    if(m.rows!=n.rows)
-    {
-        printf("Impossible to do Gauss Elimination\n");
-        printf("The matrixes are not the right size\n");
-        return create_matrix(0,0);
-    }
-
-    unsigned int i,j,k;
-    float aux;
-
-    /* We work with copies of the matrixes because we have to
-     * change them a lot                                        */
-    struct matrix c=copy_matrix(m);
-    struct matrix b=copy_matrix(n);
-
-    /* If we have to change the position of some rows, we have
-     * to have a way to know where they were                    */
-    float *changes;
-    changes=malloc(c.rows*sizeof(int));
-    for (i = 0; i < c.rows; i++)
-        changes[i]=i;
-
-    for (i = 0; i < c.columns; i++)
-    {
-        /* We have to be sure that the pivot we are using isn't 0
-         * if so, we search for a row with a pivot different from
-         * 0 and use it. We change the content in the changes array
-         * so we can unchange them later */
-        if(c.mat[i][i]==0)
-            for (k = i+1; k < c.rows && c.mat[i][i]==0; k++)
-                if(c.mat[k][i]!=0)
-                {
-                    change_rows(c,i,k);
-                    change_rows(b,i,k);
-                    changes[i]=k;
-                    changes[k]=i;
-                }
-
-        /* Now that we are sure that the pivot isn't 0, we can
-         * eliminate the numbers of the i column.
-         * If j is different from i, that means that j is a row
-         * in which we have to eliminate the i,j number.
-         * If j is the same as i, we have to divide the row by
-         * the i,i number so we have a 1 in the i,i position */
-        for (j = 0; j < c.rows; j++)
-        {
-            if(j!=i)
-            {
-                aux=c.mat[j][i]/c.mat[i][i];
-                for (k = i; k < c.columns; k++)
-                    c.mat[j][k]-=aux*c.mat[i][k];
-                for (k = 0; k < b.columns; k++)
-                    b.mat[j][k]-=aux*b.mat[i][k];
-            }
-            else
-            {
-                aux=c.mat[i][i];
-                for (k = i; k < c.columns; k++)
-                    c.mat[j][k]/=aux;
-                for (k = 0; k < b.columns; k++)
-                    b.mat[j][k]/=aux;
-            }
-        }
-    }
-
-    /* We have to unmake all the changes we have made */
-    for (i = 0; i < c.rows; i++)
-        if(changes[i]!=i)
-            for (j = 0; j < c.rows; j++)
-                if(changes[j]==i)
-                {
-                    change_rows(b,i,j);
-                    break;
-                }
-    return b;
-}
-
-/* This function returns the inverse of a matrix using
- * the gauss elimination algorithm with an identity matrix
- * returns a 0x0 matrix if the given matrix isn't square    */
-struct matrix inverse_matrix(struct matrix m)
-{
-    if(m.rows!=m.columns)
-    {
-        printf("Impossible to find inverse matrix\n");
-        printf("Imput matrix not square\n");
-        return create_matrix(0,0);
-    }
-
-    return gauss_elimination(m,identity_matrix(m.rows));
 }
 
 /* This function returns the determinant of a matrix using
@@ -821,4 +676,149 @@ float determinant_laplace(struct matrix m)
                 det-=m.mat[0][i]*determinant_laplace(minor_matrix(m,0,i));
     }
     return det;
+}
+
+/* This function returns the sum of two matrixes
+ * returns a 0x0 matrix if they can't be summed */
+struct matrix matrix_sum(struct matrix m1, struct matrix m2)
+{
+    if(m1.rows!=m2.rows||m1.columns!=m2.columns)
+    {
+        printf("These matrixes doesn't have the same size\n");
+        printf("Imposible to sum them.\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i,j;
+    struct matrix c=create_matrix(m1.rows,m1.columns);
+    for (i = 0; i < m1.rows; i++)
+        for (j = 0; j < m1.columns; j++)
+            c.mat[i][j]=m1.mat[i][j]+m2.mat[i][j];
+    return c;
+}
+
+/* This function returns the subtraction of two matrixes
+ * returns a 0x0 matrix if they can't be summed */
+struct matrix matrix_subtraction(struct matrix m1, struct matrix m2)
+{
+    if(m1.rows!=m2.rows||m1.columns!=m2.columns)
+    {
+        printf("These matrixes doesn't have the same size\n");
+        printf("Imposible to subtract them.\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i,j;
+    struct matrix c=create_matrix(m1.rows,m1.columns);
+    for (i = 0; i < m1.rows; i++)
+        for (j = 0; j < m1.columns; j++)
+            c.mat[i][j]=m1.mat[i][j]-m2.mat[i][j];
+    return c;
+}
+
+/* This function returns the multiplication of two matrixes
+ * returns a 0x0 matrix if they can't be multiplied         */
+struct matrix matrix_multiplication(struct matrix m1, struct matrix m2)
+{
+    if(m1.columns!=m2.rows)
+    {
+        printf("These matrixes can't be multiplied\n");
+        printf("They don't have the right size\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i,j,k;
+    struct matrix c=create_matrix(m1.rows,m2.columns);
+    for (i = 0; i < m1.rows; i++)
+        for (j = 0; j < m2.columns; j++)
+            for (k = 0; k < m1.columns; k++)
+                c.mat[i][j]+=m1.mat[i][k]*m2.mat[k][j];
+    return c;
+}
+
+/* This function implements the gauss elimination algorithm
+ * in a given matrix and a second matrix with the independient
+ * coeficients.
+ * Note that you pass a matrix as the second argument, so you
+ * can solve several linear equations with the same form at
+ * the same time.
+ * returns a 0x0 matrix if the matrixes have different number
+ * of rows.                                                     */
+struct matrix gauss_elimination(struct matrix m,struct matrix n)
+{
+    if(m.rows!=n.rows)
+    {
+        printf("Impossible to do Gauss Elimination\n");
+        printf("The matrixes are not the right size\n");
+        return create_matrix(0,0);
+    }
+
+    unsigned int i,j,k;
+    float aux;
+
+    /* We work with copies of the matrixes because we have to
+     * change them a lot                                        */
+    struct matrix c=copy_matrix(m);
+    struct matrix b=copy_matrix(n);
+
+    /* If we have to change the position of some rows, we have
+     * to have a way to know where they were                    */
+    float *changes;
+    changes=malloc(c.rows*sizeof(int));
+    for (i = 0; i < c.rows; i++)
+        changes[i]=i;
+
+    for (i = 0; i < c.columns; i++)
+    {
+        /* We have to be sure that the pivot we are using isn't 0
+         * if so, we search for a row with a pivot different from
+         * 0 and use it. We change the content in the changes array
+         * so we can unchange them later */
+        if(c.mat[i][i]==0)
+            for (k = i+1; k < c.rows && c.mat[i][i]==0; k++)
+                if(c.mat[k][i]!=0)
+                {
+                    change_rows(c,i,k);
+                    change_rows(b,i,k);
+                    changes[i]=k;
+                    changes[k]=i;
+                }
+
+        /* Now that we are sure that the pivot isn't 0, we can
+         * eliminate the numbers of the i column.
+         * If j is different from i, that means that j is a row
+         * in which we have to eliminate the i,j number.
+         * If j is the same as i, we have to divide the row by
+         * the i,i number so we have a 1 in the i,i position */
+        for (j = 0; j < c.rows; j++)
+        {
+            if(j!=i)
+            {
+                aux=c.mat[j][i]/c.mat[i][i];
+                for (k = i; k < c.columns; k++)
+                    c.mat[j][k]-=aux*c.mat[i][k];
+                for (k = 0; k < b.columns; k++)
+                    b.mat[j][k]-=aux*b.mat[i][k];
+            }
+            else
+            {
+                aux=c.mat[i][i];
+                for (k = i; k < c.columns; k++)
+                    c.mat[j][k]/=aux;
+                for (k = 0; k < b.columns; k++)
+                    b.mat[j][k]/=aux;
+            }
+        }
+    }
+
+    /* We have to unmake all the changes we have made */
+    for (i = 0; i < c.rows; i++)
+        if(changes[i]!=i)
+            for (j = 0; j < c.rows; j++)
+                if(changes[j]==i)
+                {
+                    change_rows(b,i,j);
+                    break;
+                }
+    return b;
 }
