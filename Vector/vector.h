@@ -186,6 +186,18 @@ float module(struct vector v)
     return sqrt(aux);
 }
 
+/* This function returns the unitary vector from
+ * an input vector                              */
+struct vector unitary_vector(struct vector v)
+{
+    struct vector w=create_vector(v.dimension);
+    float aux=module(v);
+    unsigned int i;
+    for (i = 0; i < v.dimension; i++)
+        w.vec[i]=v.vec[i]/aux;
+    return w;
+}
+
 /* This function returns the sum of two vectors
  * returns a 0-dimensional vector if they can't
  * be summed                                    */

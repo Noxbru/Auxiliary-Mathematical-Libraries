@@ -43,6 +43,7 @@ int check_parallel(struct vector v1, struct vector v2)
 void fill_vector_with(struct vector v, float n)
 struct vector multiply_vector_by(struct vector v, float n)
 float module(struct vector v)
+struct vector unitary_vector(struct vector v)
 
 === Functions to do operations with two vectors ===
 
