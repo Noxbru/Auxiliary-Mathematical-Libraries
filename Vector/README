@@ -1,0 +1,52 @@
+/* This is a library to use vectors in C
+ * written by Bruno Jiménez
+ * under the Catware licence && GPL licence
+ * More info of the Catware licence can be
+ * found here: http://lists.debian.org/debian-devel/1999/01/msg01921.html
+ * but it says that if you find this code useful
+ * you should pay for it petting some cats
+ * Any request or bug or anything of the code
+ * please, contact brunojimen(at)gmail(dot)com
+ */
+
+The vectors are structures with this shape:
+A pointer to an array of floats and an unsigned
+integer which is the dimension of the vector
+
+struct vector
+{
+    float *vec;
+    unsigned int dimension;
+};
+
+So far, we have implemented the following functions:
+
+=== Functions to create vectors ===
+
+struct vector create_vector(unsigned int n)
+struct vector get_vector(void)
+struct vector vector_from_string(char *c, unsigned int n)
+struct vector copy_vector(struct vector v)
+
+=== Functions to print vectors ===
+
+void print_vector(struct vector v)
+
+=== Functions to check types of vectors ===
+
+int compare_vector(struct vector v1, struct vector v2)
+int check_orthogonal(struct vector v1, struct vector v2)
+int check_parallel(struct vector v1, struct vector v2)
+
+=== Functions to do operations on one single vector ===
+
+void fill_vector_with(struct vector v, float n)
+struct vector multiply_vector_by(struct vector v, float n)
+float module(struct vector v)
+
+=== Functions to do operations with two vectors ===
+
+struct vector vector_sum(struct vector v1, struct vector v2)
+struct vector vector_subtraction(struct vector v1, struct vector v2)
+float scalar_product(struct vector v1, struct vector v2)
+struct vector vectorial_product(struct vector v1, struct vector v2)

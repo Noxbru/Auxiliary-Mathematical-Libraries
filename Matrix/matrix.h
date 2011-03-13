@@ -24,7 +24,7 @@ struct matrix
     unsigned int rows, columns;
 };
 
-/* This funtion creates a matrix m x n filled with 0s */
+/* This function creates a matrix m x n filled with 0s */
 struct matrix create_matrix(unsigned int m, unsigned int n)
 {
     unsigned int i;
@@ -81,7 +81,7 @@ struct matrix matrix_from_string(char *c, unsigned int m, unsigned int n)
                 printf("Filled untill %u,%u\n",i+1,j+1);
                 return a;
             }
-    if(strtok(NULL," ")!=NULL)
+    if(number!=NULL)
     {
         printf("There are still numbers in the string\n");
         printf("that couldn't be written in the matrix\n");
@@ -162,7 +162,7 @@ int check_antisymmetric(struct matrix m)
     return 1;
 }
 
-/*This function checks if a matrix is orthogonal
+/* This function checks if a matrix is orthogonal
  * returns -1 if it can't be checked
  * returns 0 if it isn't orthogonal
  * returns 1 if it is orthogonal                */
@@ -698,7 +698,7 @@ struct matrix matrix_sum(struct matrix m1, struct matrix m2)
 }
 
 /* This function returns the subtraction of two matrixes
- * returns a 0x0 matrix if they can't be summed */
+ * returns a 0x0 matrix if they can't be subtracted      */
 struct matrix matrix_subtraction(struct matrix m1, struct matrix m2)
 {
     if(m1.rows!=m2.rows||m1.columns!=m2.columns)

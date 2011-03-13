@@ -41,7 +41,7 @@ int check_antisymmetric(struct matrix m)
 int check_orthogonal(struct matrix m)
 int compare_matrix(struct matrix m1, struct matrix m2)
 
-=== Funtions to do operations on one single matrix ===
+=== Functions to do operations on one single matrix ===
 
 void fill_matrix_with(struct matrix m, float n)
 struct matrix multiply_matrix_by(struct matrix m, float n)
