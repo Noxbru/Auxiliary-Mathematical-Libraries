@@ -61,8 +61,8 @@ struct matrix n_replace_column(struct matrix m, unsigned int n, float * a, unsig
 struct matrix minor_matrix(struct matrix m, unsigned int i, unsigned int j)
 
 struct matrix traspose(struct matrix m)
-struct matrix oposite_matrix(struct matrix m)
-struct matrix inverse(struct matrix m)
+struct matrix oposite(struct matrix m)
+struct matrix inverse_matrix(struct matrix m)
 
 float multiply_diagonal(struct matrix m)
 float sum_diagonal(struct matrix m)
