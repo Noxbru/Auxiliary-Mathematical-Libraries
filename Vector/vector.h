@@ -183,7 +183,7 @@ float module(struct vector v)
     float aux=0;
     for (i = 0; i < v.dimension; i++)
         aux+=v.vec[i]*v.vec[i];
-    return aux;
+    return sqrt(aux);
 }
 
 /* This function returns the sum of two vectors
