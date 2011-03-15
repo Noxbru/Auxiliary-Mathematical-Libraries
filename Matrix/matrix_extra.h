@@ -93,3 +93,15 @@ struct vector multiply_matrix_from_right(struct matrix m, struct vector v)
     struct vector v1=vector_from_matrix(m2);
     return v1;
 }
+
+float mutiply_matrix_from_both_sides(struct matrix m, struct vector v1, struct vector v2)
+{
+    struct vector v=multiply_matrix_from_right(m,v2);
+    return scalar_product(v1,v);
+}
+
+float bilinear_product(struct matrix m, struct vector v)
+{
+    struct vector v1=multiply_matrix_from_right(m,v);
+    return scalar_product(v,v1);
+}
