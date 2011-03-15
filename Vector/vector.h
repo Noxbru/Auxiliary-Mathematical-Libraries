@@ -81,6 +81,16 @@ struct vector vector_from_string(char *c, unsigned int n)
     }
 }
 
+/* This function is used to create a vector from an array */
+struct vector vector_from_array(float *a, unsigned int n)
+{
+    struct vector v=create_vector(n);
+    unsigned int i;
+    for (i = 0; i < n; i++)
+        v.vec[i]=a[i];
+    return v;
+}
+
 /* This function returns a copy of the given vector */
 struct vector copy_vector(struct vector v)
 {

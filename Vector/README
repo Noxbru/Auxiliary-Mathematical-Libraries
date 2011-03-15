@@ -26,6 +26,7 @@ So far, we have implemented the following functions:
 struct vector create_vector(unsigned int n)
 struct vector get_vector(void)
 struct vector vector_from_string(char *c, unsigned int n)
+struct vector vector_from_array(float *a, unsigned int n)
 struct vector copy_vector(struct vector v)
 
 === Functions to print vectors ===
