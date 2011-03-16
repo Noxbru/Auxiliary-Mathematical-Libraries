@@ -74,32 +74,65 @@ struct matrix matrix_product(struct vector v1, struct vector v2)
 }
 
 /* Multiplicates a matrix by a row vector from the left
- * The result is returned as a vector                   */
+ * The result is returned as a vector
+ * Returns a 0-dimensional vector if the number of rows
+ * of the matrix and the dimension of the original vector
+ * are different                                            */
 struct vector multiply_matrix_from_left(struct matrix m, struct vector v)
 {
-    struct matrix m1=row_matrix_from_vector(v);
-    struct matrix m2=matrix_multiplication(m1,m);
-    struct vector v1=vector_from_matrix(m2);
+    if(m.rows!=v.dimension)
+    {
+        printf("The number of rows of the matrix\n");
+        printf("Is different from the dimension of the Vectors\n");
+        printf("Impossible to multiply them\n");
+        return create_vector(0);
+    }
+
+    struct vector v1=create_vector(m.columns);
+    unsigned int i,j;
+    for (i = 0; i < m.columns; i++)
+        for (j = 0; j < m.rows; j++)
+            v1.vec[i]+=v1.vec[j]*m.mat[i][j];
     return v1;
 }
 
-/* Multiplicates a matrix by a column vector from the
- * right
- * The result is returned as a vector                   */
+/* Multiplicates a matrix by a column vector from the right
+ * The result is returned as a vector
+ * Returns a 0-dimensional vector if the number of columns
+ * of the matrix and the dimension of the original vector
+ * are different                                            */
 struct vector multiply_matrix_from_right(struct matrix m, struct vector v)
 {
-    struct matrix m1=column_matrix_from_vector(v);
-    struct matrix m2=matrix_multiplication(m,m1);
-    struct vector v1=vector_from_matrix(m2);
+    if(m.rows!=v.dimension)
+    {
+        printf("The number of columns of the matrix\n");
+        printf("Is different from the dimension of the Vectors\n");
+        printf("Impossible to multiply them\n");
+        return create_vector(0);
+    }
+
+    struct vector v1=create_vector(m.rows);
+    unsigned int i,j;
+    for (i = 0; i < m.rows; i++)
+        for (j = 0; j < m.columns; j++)
+            v1.vec[i]+=v1.vec[j]*m.mat[i][j];
     return v1;
 }
 
+/* Multiplicates a matrix from the left by a vector
+ * v1, and from the right by a vector v2
+ * Relies on the multiply a matrix from a side
+ * and scalar product to return warnings            */
 float mutiply_matrix_from_both_sides(struct matrix m, struct vector v1, struct vector v2)
 {
     struct vector v=multiply_matrix_from_right(m,v2);
     return scalar_product(v1,v);
 }
 
+/* Multiplicates a matrix from the left and the
+ * right by a vector v
+ * Relies on the multiply a matrix from a side
+ * and scalar product to return warnings            */
 float bilinear_product(struct matrix m, struct vector v)
 {
     struct vector v1=multiply_matrix_from_right(m,v);
