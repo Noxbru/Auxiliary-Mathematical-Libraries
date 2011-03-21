@@ -153,6 +153,23 @@ void print_matrix(struct matrix m)
     }
 }
 
+/* */
+void print_matrix_to_file(char *c, struct matrix m)
+{
+    FILE *f;
+    f=fopen(c,"w");
+    if(f==NULL)
+        printf("Error opening file\n");
+
+    unsigned i,j;
+    for (i = 0; i < m.rows; i++)
+    {
+        for (j = 0; j < m.columns; j++)
+            fprintf(f,"%f\t",m.mat[i][j]);
+        fprintf(f,"\n");
+    }
+}
+
 /* This function checks if a matrix is symmetric
  * returns -1 if it can't be checked
  * returns  0 if it isn't symmetric
