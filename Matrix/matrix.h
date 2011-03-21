@@ -89,6 +89,37 @@ struct matrix matrix_from_string(char *c, unsigned int m, unsigned int n)
     return a;
 }
 
+/* */
+struct matrix matrix_from_file(char *c, unsigned int m, unsigned int n)
+{
+    FILE *f;
+    f=fopen(c,"r");
+    if(f==NULL)
+    {
+        printf("Error opening file %s\n",c);
+        return create_matrix(0,0);
+    }
+
+    struct matrix a=create_matrix(m,n);
+    unsigned i,j;
+
+    for (i = 0; i < m; i++)
+        for (j = 0; j < n; j++)
+            if(fscanf(f,"%f",&a.mat[i][j])==EOF)
+            {
+                printf("Problems creating matrix\n");
+                printf("It couldn't be totally filled\n");
+                printf("Filled untill %u,%u\n",i+1,j+1);
+                return a;
+            }
+    if(feof(f))
+    {
+        printf("There are still numbers in the file\n");
+        printf("that couldn't be written in the matrix\n");
+    }
+    return a;
+}
+
 /* This function returns a copy of the given matrix */
 struct matrix copy_matrix(struct matrix m)
 {
@@ -162,6 +193,8 @@ int check_antisymmetric(struct matrix m)
     return 1;
 }
 
+struct matrix traspose(struct matrix m);
+struct matrix matrix_multiplication(struct matrix m1, struct matrix m2);
 /* This function checks if a matrix is orthogonal
  * returns -1 if it can't be checked
  * returns 0 if it isn't orthogonal
@@ -520,6 +553,7 @@ struct matrix oposite(struct matrix m)
     return c;
 }
 
+struct matrix gauss_elimination(struct matrix m1, struct matrix m2);
 /* This function returns the inverse of a matrix using
  * the gauss elimination algorithm with an identity matrix
  * returns a 0x0 matrix if the given matrix isn't square    */
