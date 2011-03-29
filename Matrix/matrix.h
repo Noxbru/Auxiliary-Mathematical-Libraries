@@ -57,7 +57,7 @@ struct matrix get_matrix(void)
 
 /* This function is used to create a matrix from a string
  * The string has to be a series of numbers separated by spaces
- * If the string is not big enough, it returns what it have
+ * If the string is not big enough, it returns what it has
  * done and the rest filled with 0s                             */
 /* As I don't recommend the use of strings in C, I strongly
  * recommend not to use this function                           */
@@ -89,7 +89,12 @@ struct matrix matrix_from_string(char *c, unsigned int m, unsigned int n)
     return a;
 }
 
-/* */
+/* This function is used to create a matrix from a file
+ * The file has to be a series of numbers separated by spaces
+ * if there aren't enough numbers, it returns what it has done
+ * and the rest is filled with 0s
+ * Returns a 0x0 matrix if there is any problem
+ * opening the file                                             */
 struct matrix matrix_from_file(char *c, unsigned int m, unsigned int n)
 {
     FILE *f;
@@ -148,12 +153,14 @@ void print_matrix(struct matrix m)
     for (i = 0; i < m.rows; i++)
     {
         for (j = 0; j < m.columns; j++)
-            printf("%f\t",m.mat[i][j]);
+            printf("%f\t",m.mat[i][j]);     //STUDY THE USE OF %.*f
         printf("\n");
     }
 }
 
-/* */
+/* This function prints a matrix in a file
+ * named as the string that c points to
+ * If the file doesn't exist it is created  */
 void print_matrix_to_file(char *c, struct matrix m)
 {
     FILE *f;
@@ -228,6 +235,35 @@ int check_orthogonal(struct matrix m)
     c=matrix_multiplication(m,c);
     return compare_matrix(c,identity_matrix(c.rows));
 }
+
+/* alternative code for the check_orthogonal function
+ * still in development
+
+int check_orthogonal(struct matrix m)
+{
+    if(m.rows!=m.columns)
+    {
+        printf("This matrix isn't square\n");
+        return -1;
+    }
+
+    unsigned int i,j,k;
+    float check=0;
+    for (i = 0; i < m.rows; i++)
+        for (j = 0; j < m.rows; j++)
+        {
+            for (k = 0; k < m.columns; k++)
+                check+=m.mat[i][k]*m.mat[j][k];
+            if(i!=j&&check!=0)
+                return 0;
+            if(i==j&&check!=1)
+                return 0;
+            check=0;
+        }
+    return 1;
+}
+
+ * */
 
 /* This function compares two matrixes
  * returns -1 if they can't be compared
