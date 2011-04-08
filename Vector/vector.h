@@ -91,6 +91,41 @@ struct vector vector_from_array(float *a, unsigned int n)
     return v;
 }
 
+/* This function is used to create a vector from a file
+ * The file has to be a series of numbers separated by spaces
+ * if there aren't enough numbers, it returns what it has done
+ * and the rest is filled with 0s
+ * Returns a 0-dimensional vector if there is any problem
+ * opening the file                                             */
+struct vector vector_from_file(char *c, unsigned int n)
+{
+    FILE *f;
+    f=fopen(c,"r");
+    if(f==NULL)
+    {
+        printf("Error opening file %s\n",c);
+        return create_vector(0);
+    }
+
+    struct vector v=create_vector(n);
+    unsigned int i;
+
+    for (i = 0; i < n; i++)
+        if(fscanf(f,"%f",&v.vec[i])==EOF)
+        {
+            printf("Problems creating vector\n");
+            printf("It couldn't be totally filled\n");
+            printf("Filled untill %u\n",i+1);
+            return v;
+        }
+    if(!feof(f))
+    {
+        printf("There are still numbers in the file\n");
+        printf("that couldn't be written in the vector\n");
+    }
+    return v;
+}
+
 /* This function returns a copy of the given vector */
 struct vector copy_vector(struct vector v)
 {
@@ -111,61 +146,26 @@ void print_vector(struct vector v)
     printf(")\n");
 }
 
-/* This function compares two vectors
- * returns -1 if they can't be compared
- * returns 0 if they are different
- * returns 1 if they are the same vector    */
-int compare_vector(struct vector v1, struct vector v2)
+/* This function prints a vector in a file
+ * named as the string that c points to
+ * If the file doesn't exist it is created
+ * The third parameter is whether you want to
+ * override the contents of the file or not     */
+void print_vector_to_file(char *c, struct vector v, char over)
 {
-    if(v1.dimension!=v2.dimension)
-    {
-        printf("These vectors can't be compared\n");
-        printf("They don't have the same size\n");
-        return -1;
-    }
-
+    FILE *f;
+    if(over==0)
+        f=fopen(c,"a");
+    else
+        f=fopen(c,"w");
+    if(f==NULL)
+        printf("Error opening file\n");
+    
     unsigned int i;
-    for (i = 0; i < v1.dimension; i++)
-        if(v1.vec[i]!=v2.vec[i])
-            return 0;
-    return 1;
-}
-
-/* This function checks if two vectors are orthogonal
- * returns -1 if they can't be checked
- * returns 0 if they aren't orthogonal
- * returns 1 if they are orthogonal                     */
-int check_orthogonal(struct vector v1, struct vector v2)
-{
-    if(v1.dimension!=v2.dimension)
-    {
-        printf("These vectors can't be compared\n");
-        printf("They don't have the same size\n");
-        return -1;
-    }
-
-    return !scalar_product(v1, v2);
-}
-
-/* This function checks if two vectors are parallel
- * returns -1 if they can't be checked
- * returns 0 if they aren't parallel
- * returns 1 if they are parallel                   */
-int check_parallel(struct vector v1, struct vector v2)
-{
-    if(v1.dimension!=v2.dimension)
-    {
-        printf("These vectors can't be compared\n");
-        printf("They don't have the same size\n");
-        return -1;
-    }
-
-    unsigned int i;
-    float aux=v1[0]/v2[0];
-    for (i = 1; i < v1.dimension; i++)
-        if(v1[i]/v2[i]!=aux)
-            return 0;
-    return 1;
+    printf("(%f",v.vec[0]);
+    for (i = 1; i < v.dimension; i++)
+        printf("\t%f",v.vec[i]);
+    printf(")\n");
 }
 
 /* This function fills a vector with a float */
@@ -248,6 +248,63 @@ float min_component(struct vector v)
         if(v.vec[i]<aux)
             aux=v.vec[i];
     return aux;
+}
+
+/* This function compares two vectors
+ * returns -1 if they can't be compared
+ * returns 0 if they are different
+ * returns 1 if they are the same vector    */
+int compare_vector(struct vector v1, struct vector v2)
+{
+    if(v1.dimension!=v2.dimension)
+    {
+        printf("These vectors can't be compared\n");
+        printf("They don't have the same size\n");
+        return -1;
+    }
+
+    unsigned int i;
+    for (i = 0; i < v1.dimension; i++)
+        if(v1.vec[i]!=v2.vec[i])
+            return 0;
+    return 1;
+}
+
+/* This function checks if two vectors are orthogonal
+ * returns -1 if they can't be checked
+ * returns 0 if they aren't orthogonal
+ * returns 1 if they are orthogonal                     */
+int check_orthogonal(struct vector v1, struct vector v2)
+{
+    if(v1.dimension!=v2.dimension)
+    {
+        printf("These vectors can't be compared\n");
+        printf("They don't have the same size\n");
+        return -1;
+    }
+
+    return !scalar_product(v1, v2);
+}
+
+/* This function checks if two vectors are parallel
+ * returns -1 if they can't be checked
+ * returns 0 if they aren't parallel
+ * returns 1 if they are parallel                   */
+int check_parallel(struct vector v1, struct vector v2)
+{
+    if(v1.dimension!=v2.dimension)
+    {
+        printf("These vectors can't be compared\n");
+        printf("They don't have the same size\n");
+        return -1;
+    }
+
+    unsigned int i;
+    float aux=v1[0]/v2[0];
+    for (i = 1; i < v1.dimension; i++)
+        if(v1[i]/v2[i]!=aux)
+            return 0;
+    return 1;
 }
 
 /* This function returns the sum of two vectors

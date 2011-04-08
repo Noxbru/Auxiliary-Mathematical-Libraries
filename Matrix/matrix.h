@@ -106,7 +106,7 @@ struct matrix matrix_from_file(char *c, unsigned int m, unsigned int n)
     }
 
     struct matrix a=create_matrix(m,n);
-    unsigned i,j;
+    unsigned int i,j;
 
     for (i = 0; i < m; i++)
         for (j = 0; j < n; j++)
@@ -117,7 +117,7 @@ struct matrix matrix_from_file(char *c, unsigned int m, unsigned int n)
                 printf("Filled untill %u,%u\n",i+1,j+1);
                 return a;
             }
-    if(feof(f))
+    if(!feof(f))
     {
         printf("There are still numbers in the file\n");
         printf("that couldn't be written in the matrix\n");
@@ -153,18 +153,23 @@ void print_matrix(struct matrix m)
     for (i = 0; i < m.rows; i++)
     {
         for (j = 0; j < m.columns; j++)
-            printf("%f\t",m.mat[i][j]);     //STUDY THE USE OF %.*f
+            printf("%f\t",m.mat[i][j]);
         printf("\n");
     }
 }
 
 /* This function prints a matrix in a file
  * named as the string that c points to
- * If the file doesn't exist it is created  */
-void print_matrix_to_file(char *c, struct matrix m)
+ * If the file doesn't exist it is created
+ * The third parameter is whether you want to
+ * override the contents of the file or not     */
+void print_matrix_to_file(char *c, struct matrix m, char over)
 {
     FILE *f;
-    f=fopen(c,"w");
+    if(over==0)
+        f=fopen(c,"a");
+    else
+        f=fopen(c,"w");
     if(f==NULL)
         printf("Error opening file\n");
 
