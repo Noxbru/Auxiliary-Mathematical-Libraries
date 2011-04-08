@@ -186,7 +186,8 @@ struct vector multiply_vector_by(struct vector v, float n)
     return w;
 }
 
-/* This function returns the module of the vector */
+/* This function returns the module of the vector   */
+/* Warning, can overflow the auxiliar float         */
 float module(struct vector v)
 {
     unsigned int i;
@@ -196,8 +197,23 @@ float module(struct vector v)
     return sqrt(aux);
 }
 
+/* Alternative code for the module function
+ * is slower but safer with big components  */
+/*
+float module(struct vector v)
+{
+    float aux=max_component(v);
+    float aux2=aux*aux;
+    float mod=0;
+    unsigned int i;
+    for (i = 0; i < v.dimension; i++)
+        mod+=v.vec[i]*v.vec[i]/aux2;
+    return aux*sqrt(mod);
+}
+*/
+
 /* This function returns the unitary vector from
- * an input vector                              */
+ * an input vector                               */
 struct vector unitary_vector(struct vector v)
 {
     float aux=module(v);
@@ -208,6 +224,30 @@ struct vector unitary_vector(struct vector v)
     for (i = 0; i < v.dimension; i++)
         w.vec[i]=v.vec[i]/aux;
     return w;
+}
+
+/* This function returns the maximum component
+ * of the vector                                */
+float max_component(struct vector v)
+{
+    unsigned int i;
+    float aux;
+    for (i = 0; i < v.dimension; i++)
+        if(v.vec[i]>aux)
+            aux=v.vec[i];
+    return aux;
+}
+
+/* This function returns the minimum component
+ * of the vector                                */
+float min_component(struct vector v)
+{
+    unsigned int i;
+    float aux;
+    for (i = 0; i < v.dimension; i++)
+        if(v.vec[i]<aux)
+            aux=v.vec[i];
+    return aux;
 }
 
 /* This function returns the sum of two vectors
