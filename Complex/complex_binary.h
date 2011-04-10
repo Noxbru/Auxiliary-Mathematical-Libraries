@@ -10,12 +10,12 @@
 
 struct complex_binary
 {
-    float real, imaginary;
+    double real, imaginary;
 };
 
 /* Creates a complex number in binary form with
  * real part=a and imaginary part=b             */
-struct complex_binary create_complex_binary(float a, float b)
+struct complex_binary create_complex_binary(double a, double b)
 {
     struct complex_binary z;
     z.real=a;
@@ -106,7 +106,7 @@ struct complex_binary multiplication_complex_binary(struct complex_binary z1, st
 struct complex_binary division_complex_binary(struct complex_binary z1, struct complex_binary z2)
 {
     struct complex_binary c;
-    float denominator=z2.real*z2.real+z2.imaginary*z2.imaginary;
+    double denominator=z2.real*z2.real+z2.imaginary*z2.imaginary;
     c.real=(z1.real*z2.real+z1.imaginary*z2.imaginary)/denominator;
     c.imaginary=(z1.imaginary*z2.real-z1.real*z2.imaginary)/denominator;
     return c;
@@ -114,32 +114,44 @@ struct complex_binary division_complex_binary(struct complex_binary z1, struct c
 
 /* Returns the real part of a complex number
  * in binary form                           */
-float real_part_binary(struct complex_binary z)
+double real_part_binary(struct complex_binary z)
 {
     return z.real;
 }
 
 /* Returns the imaginary part of a complex number
  * in binary form                           */
-float imaginary_part_binary(struct complex_binary z)
+double imaginary_part_binary(struct complex_binary z)
 {
     return z.imaginary;
 }
 
 /* Returns the module of a complex number
  * in binary form                           */
-float module_binary(struct complex_binary z)
+double module_binary(struct complex_binary z)
 {
-    float c=sqrt(z.real*z.real+z.imaginary*z.imaginary);
-    return c; 
+    double real=fabs(z.real);
+    double imaginary=fabs(z.imaginary);
+    if(real==0&&imaginary==0)
+        return 0;
+    if(real<=imaginary)
+    {
+        double r=imaginary/real;
+        return r*sqrt(1+r*r);
+    }
+    else
+    {
+        double r=real/imaginary;
+        return r*sqrt(1+r*r);
+    }
 }
 
 /* Returns the argument of a complex number
  * in binary form
  * Note that it goes from -PI to +PI        */
-float argument_binary(struct complex_binary z)
+double argument_binary(struct complex_binary z)
 {
-    float c=atan2(z.imaginary,z.real);
+    double c=atan2(z.imaginary,z.real);
     return c;
 }
 
@@ -158,7 +170,7 @@ struct complex_binary conjugate_binary(struct complex_binary z)
 struct complex_binary reciprocal_binary(struct complex_binary z)
 {
     struct complex_binary c;
-    float denominator=z2.real*z2.real+z2.imaginary*z2.imaginary;
+    double denominator=z2.real*z2.real+z2.imaginary*z2.imaginary;
     c.real=z.real/denominator;
     c.imaginary=-z.imaginary/denominator;
     return c;
@@ -166,7 +178,7 @@ struct complex_binary reciprocal_binary(struct complex_binary z)
 
 /* Multiply a complex number in binary form by
  * a scalar                                      */
-struct complex_binary multiply_complex_binary_by(struct complex_binary z, float n)
+struct complex_binary multiply_complex_binary_by(struct complex_binary z, double n)
 {
     struct complex_binary c;
     c.real=z.real*n;

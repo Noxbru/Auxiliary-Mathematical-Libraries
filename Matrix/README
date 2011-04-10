@@ -10,13 +10,13 @@
  */
 
 The matrixes are structures with this shape:
-A pointer to an array of pointers to arrays of floats
+A pointer to an array of pointers to arrays of doubles
 (the rows of the matrix) and two unsigned integers
 which are the number of rows and columns of the matrix
 
 struct matrix
 {
-    float **mat;
+    double **mat;
     unsigned int rows, columns;
 };
 
@@ -45,20 +45,20 @@ int compare_matrix(struct matrix m1, struct matrix m2)
 
 === Functions to do operations on one single matrix ===
 
-void fill_matrix_with(struct matrix m, float n)
-struct matrix multiply_matrix_by(struct matrix m, float n)
+void fill_matrix_with(struct matrix m, double n)
+struct matrix multiply_matrix_by(struct matrix m, double n)
 struct matrix pow_matrix(struct matrix m, unsigned int n)
 
-float * get_row(struct matrix m, unsigned int row)
-float * get_column(struct matrix m, unsigned int column)
+double * get_row(struct matrix m, unsigned int row)
+double * get_column(struct matrix m, unsigned int column)
 struct matrix delete_row(struct matrix m, unsigned int n)
 struct matrix delete_column(struct matrix m, unsigned int n)
 void change_rows(struct matrix m, unsigned int row1, unsigned int row2)
 void change_columns(struct matrix m, unsigned int column1, unsigned int column2)
-struct matrix replace_row(struct matrix m, unsigned int n, float * a)
-struct matrix replace_column(struct matrix m, unsigned int n, float * a)
-struct matrix n_replace_row(struct matrix m, unsigned int n, float * a, unsigned int num)
-struct matrix n_replace_column(struct matrix m, unsigned int n, float * a, unsigned int num)
+struct matrix replace_row(struct matrix m, unsigned int n, double * a)
+struct matrix replace_column(struct matrix m, unsigned int n, double * a)
+struct matrix n_replace_row(struct matrix m, unsigned int n, double * a, unsigned int num)
+struct matrix n_replace_column(struct matrix m, unsigned int n, double * a, unsigned int num)
 
 struct matrix minor_matrix(struct matrix m, unsigned int i, unsigned int j)
 
@@ -66,11 +66,11 @@ struct matrix traspose(struct matrix m)
 struct matrix oposite(struct matrix m)
 struct matrix inverse_matrix(struct matrix m)
 
-float multiply_diagonal(struct matrix m)
-float sum_diagonal(struct matrix m)
-float determinant(struct matrix m)
-float sarrus(struct matrix m)
-float determinant_laplace(struct matrix m)
+double multiply_diagonal(struct matrix m)
+double sum_diagonal(struct matrix m)
+double determinant(struct matrix m)
+double sarrus(struct matrix m)
+double determinant_laplace(struct matrix m)
 
 === Functions to do operations with two matrixes ===
 
@@ -91,5 +91,5 @@ struct vector vector_from_matrix(struct matrix m)
 struct matrix matrix_product(struct vector v1, struct vector v2)
 struct vector multiply_matrix_from_left(struct matrix m, struct vector v)
 struct vector multiply_matrix_from_right(struct matrix m, struct vector v)
-float mutiply_matrix_from_both_sides(struct matrix m, struct vector v1, struct vector v2)
-float bilinear_product(struct matrix m, struct vector v)
+double mutiply_matrix_from_both_sides(struct matrix m, struct vector v1, struct vector v2)
+double bilinear_product(struct matrix m, struct vector v)

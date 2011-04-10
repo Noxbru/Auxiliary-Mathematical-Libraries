@@ -20,7 +20,7 @@
 
 struct matrix
 {
-    float **mat;
+    double **mat;
     unsigned int rows, columns;
 };
 
@@ -31,9 +31,9 @@ struct matrix create_matrix(unsigned int m, unsigned int n)
     struct matrix m1;
     m1.rows=m;
     m1.columns=n;
-    m1.mat=malloc(m*sizeof(float *));
+    m1.mat=malloc(m*sizeof(double *));
     for (i = 0; i < m1.rows; i++)
-        m1.mat[i]=malloc(n*sizeof(float));
+        m1.mat[i]=malloc(n*sizeof(double));
     return m1;
 }
 
@@ -253,7 +253,7 @@ int check_orthogonal(struct matrix m)
     }
 
     unsigned int i,j,k;
-    float check=0;
+    double check=0;
     for (i = 0; i < m.rows; i++)
         for (j = 0; j < m.rows; j++)
         {
@@ -291,8 +291,8 @@ int compare_matrix(struct matrix m1, struct matrix m2)
     return 1;
 }
 
-/* This function fills a matrix with a float */
-void fill_matrix_with(struct matrix m, float n)
+/* This function fills a matrix with a double */
+void fill_matrix_with(struct matrix m, double n)
 {
     unsigned int i,j;
     for (i = 0; i < m.rows; i++)
@@ -301,7 +301,7 @@ void fill_matrix_with(struct matrix m, float n)
 }
 
 /* This function returns the matrix multiplied by n */ 
-struct matrix multiply_matrix_by(struct matrix m, float n)
+struct matrix multiply_matrix_by(struct matrix m, double n)
 {
     unsigned int i,j;
     struct matrix c=create_matrix(m.rows,m.columns);
@@ -333,7 +333,7 @@ struct matrix pow_matrix(struct matrix m, unsigned int n)
  * of the row-1 row
  * Note that it returns a copy of row-1
  * not a copy of row                        */
-float * get_row(struct matrix m, unsigned int row)
+double * get_row(struct matrix m, unsigned int row)
 {
     if(row+1>m.rows)
     {
@@ -343,8 +343,8 @@ float * get_row(struct matrix m, unsigned int row)
     }
 
     unsigned int i;
-    float *a;
-    a=malloc(m.columns*sizeof(float));
+    double *a;
+    a=malloc(m.columns*sizeof(double));
     for (i = 0; i < m.columns; i++)
         a[i]=m.mat[row][i];
     return a;
@@ -354,7 +354,7 @@ float * get_row(struct matrix m, unsigned int row)
  * of the column-1 column
  * Note that it returns a copy of column-1
  * not a copy of column                     */
-float * get_column(struct matrix m, unsigned int column)
+double * get_column(struct matrix m, unsigned int column)
 {
     if(column+1>m.columns)
     {
@@ -364,8 +364,8 @@ float * get_column(struct matrix m, unsigned int column)
     }
 
     unsigned int i;
-    float *a;
-    a=malloc(m.rows*sizeof(float));
+    double *a;
+    a=malloc(m.rows*sizeof(double));
     for (i = 0; i < m.rows; i++)
         a[i]=m.mat[i][column];
     return a;
@@ -433,7 +433,7 @@ void change_rows(struct matrix m, unsigned int row1, unsigned int row2)
         return;
     }
 
-    float *aux;
+    double *aux;
     aux=m.mat[row1];
     m.mat[row1]=m.mat[row2];
     m.mat[row2]=aux;
@@ -450,7 +450,7 @@ void change_columns(struct matrix m, unsigned int column1, unsigned int column2)
     }
 
     unsigned int i;
-    float aux;
+    double aux;
     for (i = 0; i < m.rows; i++)
     {
         aux=m.mat[i][column1];
@@ -465,7 +465,7 @@ void change_columns(struct matrix m, unsigned int column1, unsigned int column2)
  * it is longer than the row size in m, in this case,
  * only the elements of a that fit in the row are used
  * returns a 0x0 matrix if there isn't that row in the matrix */
-struct matrix replace_row(struct matrix m, unsigned int n, float * a)
+struct matrix replace_row(struct matrix m, unsigned int n, double * a)
 {
     if(n+1>m.rows)
     {
@@ -487,7 +487,7 @@ struct matrix replace_row(struct matrix m, unsigned int n, float * a)
  * it is longer than the column size in m, in this case,
  * only the elements of a that fit in the column are used
  * returns a 0x0 matrix if there isn't that column in the matrix */
-struct matrix replace_column(struct matrix m, unsigned int n, float * a)
+struct matrix replace_column(struct matrix m, unsigned int n, double * a)
 {
     if(n+1>m.columns)
     {
@@ -511,7 +511,7 @@ struct matrix replace_column(struct matrix m, unsigned int n, float * a)
  * if num is bigger than the row size in m, in this case,
  * only the elements of a that fit in the row are used
  * returns a 0x0 matrix if there isn't that row in the matrix */
-struct matrix n_replace_row(struct matrix m, unsigned int n, float * a, unsigned int num)
+struct matrix n_replace_row(struct matrix m, unsigned int n, double * a, unsigned int num)
 {
     if(n+1>m.rows)
     {
@@ -537,7 +537,7 @@ struct matrix n_replace_row(struct matrix m, unsigned int n, float * a, unsigned
  * if num is bigger than the column size in m, in this case,
  * only the elements of a that fit in the column are used
  * returns a 0x0 matrix if there isn't that column in the matrix */
-struct matrix n_replace_column(struct matrix m, unsigned int n, float * a, unsigned int num)
+struct matrix n_replace_column(struct matrix m, unsigned int n, double * a, unsigned int num)
 {
     if(n+1>m.columns)
     {
@@ -629,7 +629,7 @@ struct matrix inverse_matrix(struct matrix m)
 
 /* This function returns the product of the diagonal of the matrix
  * returns -1 if the matrix isn't square                             */
-float multiply_diagonal(struct matrix m)
+double multiply_diagonal(struct matrix m)
 {
     if(m.rows!=m.columns)
     {
@@ -639,7 +639,7 @@ float multiply_diagonal(struct matrix m)
     }
 
     unsigned int i;
-    float aux=1;
+    double aux=1;
     for (i = 0; i < m.rows; i++)
         aux*=m.mat[i][i];
     return aux;
@@ -647,7 +647,7 @@ float multiply_diagonal(struct matrix m)
 
 /* This function returns the sum of the diagonal of the matrix
  * returns -1 if the matrix isn't square                        */
-float sum_diagonal(struct matrix m)
+double sum_diagonal(struct matrix m)
 {
     if(m.rows!=m.columns)
     {
@@ -657,7 +657,7 @@ float sum_diagonal(struct matrix m)
     }
 
     unsigned int i;
-    float aux=0;
+    double aux=0;
     for (i = 0; i < m.rows; i++)
         aux+=m.mat[i][i];
     return aux;
@@ -666,7 +666,7 @@ float sum_diagonal(struct matrix m)
 /* This function returns the determinant of a matrix using
  * a gauss elimination-like algorithm
  * returns -1 if the given matrix isn't square              */
-float determinant(struct matrix m)
+double determinant(struct matrix m)
 {
     if(m.rows!=m.columns)
     {
@@ -676,8 +676,8 @@ float determinant(struct matrix m)
     }
 
     unsigned int i,j,k;
-    float aux;
-    float factor=1;
+    double aux;
+    double factor=1;
     
     /* We work with a copy of the matrix because we have to
      * change it a lot                                      */
@@ -716,7 +716,7 @@ float determinant(struct matrix m)
 /* This function implements Sarrus rule to calculate determinants
  * of 2x2 and 3x3 matrixes
  * returns -1 if the matrix isn't square, 2x2 or 3x3                */
-float sarrus(struct matrix m)
+double sarrus(struct matrix m)
 {
     if(m.rows!=m.columns)
     {
@@ -735,7 +735,7 @@ float sarrus(struct matrix m)
         return m.mat[0][0]*m.mat[1][1]-m.mat[0][1]*m.mat[1][0];
     if(m.rows==3)
     {
-        float fac1, fac2, fac3;
+        double fac1, fac2, fac3;
         fac1=m.mat[0][0]*(m.mat[1][1]*m.mat[2][2]-m.mat[1][2]*m.mat[2][1]);
         fac2=m.mat[0][1]*(m.mat[1][2]*m.mat[2][0]-m.mat[1][0]*m.mat[2][2]);
         fac3=m.mat[0][2]*(m.mat[1][0]*m.mat[2][1]-m.mat[1][1]*m.mat[2][0]);
@@ -746,7 +746,7 @@ float sarrus(struct matrix m)
 /* This function calculates the determinant of a matrix using
  * the Laplace expansion
  * returns -1 if the matrix isn't square                        */
-float determinant_laplace(struct matrix m)
+double determinant_laplace(struct matrix m)
 {
     if(m.rows!=m.columns)
     {
@@ -758,7 +758,7 @@ float determinant_laplace(struct matrix m)
         return sarrus(m);
 
     unsigned int i;
-    float det=0;
+    double det=0;
     for (i = 0; i < m.columns; i++)
     {
         if(m.mat[0][i]!=0)
@@ -846,7 +846,7 @@ struct matrix gauss_elimination(struct matrix m,struct matrix n)
     }
 
     unsigned int i,j,k;
-    float aux;
+    double aux;
 
     /* We work with copies of the matrixes because we have to
      * change them a lot                                        */
@@ -855,7 +855,7 @@ struct matrix gauss_elimination(struct matrix m,struct matrix n)
 
     /* If we have to change the position of some rows, we have
      * to have a way to know where they were                    */
-    float *changes;
+    double *changes;
     changes=malloc(c.rows*sizeof(int));
     for (i = 0; i < c.rows; i++)
         changes[i]=i;

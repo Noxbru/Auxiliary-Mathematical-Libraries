@@ -123,7 +123,7 @@ struct vector multiply_matrix_from_right(struct matrix m, struct vector v)
  * v1, and from the right by a vector v2
  * Relies on the multiply a matrix from a side
  * and scalar product to return warnings            */
-float mutiply_matrix_from_both_sides(struct matrix m, struct vector v1, struct vector v2)
+double mutiply_matrix_from_both_sides(struct matrix m, struct vector v1, struct vector v2)
 {
     struct vector v=multiply_matrix_from_right(m,v2);
     return scalar_product(v1,v);
@@ -133,7 +133,7 @@ float mutiply_matrix_from_both_sides(struct matrix m, struct vector v1, struct v
  * right by a vector v
  * Relies on the multiply a matrix from a side
  * and scalar product to return warnings            */
-float bilinear_product(struct matrix m, struct vector v)
+double bilinear_product(struct matrix m, struct vector v)
 {
     struct vector v1=multiply_matrix_from_right(m,v);
     return scalar_product(v,v1);

@@ -10,12 +10,12 @@
  */
 
 The vectors are structures with this shape:
-A pointer to an array of floats and an unsigned
+A pointer to an array of doubles and an unsigned
 integer which is the dimension of the vector
 
 struct vector
 {
-    float *vec;
+    double *vec;
     unsigned int dimension;
 };
 
@@ -26,7 +26,7 @@ So far, we have implemented the following functions:
 struct vector create_vector(unsigned int n)
 struct vector get_vector(void)
 struct vector vector_from_string(char *c, unsigned int n)
-struct vector vector_from_array(float *a, unsigned int n)
+struct vector vector_from_array(double *a, unsigned int n)
 struct vector copy_vector(struct vector v)
 
 === Functions to print vectors ===
@@ -36,12 +36,12 @@ void print_vector_to_file(char *c, struct vector v, char over)
 
 === Functions to do operations on one single vector ===
 
-void fill_vector_with(struct vector v, float n)
-struct vector multiply_vector_by(struct vector v, float n)
-float module(struct vector v)
+void fill_vector_with(struct vector v, double n)
+struct vector multiply_vector_by(struct vector v, double n)
+double module(struct vector v)
 struct vector unitary_vector(struct vector v)
-float max_component(struct vector v)
-float min_component(struct vector v)
+double max_component(struct vector v)
+double min_component(struct vector v)
 
 === Functions to check types of vectors ===
 
@@ -53,5 +53,5 @@ int check_parallel(struct vector v1, struct vector v2)
 
 struct vector vector_sum(struct vector v1, struct vector v2)
 struct vector vector_subtraction(struct vector v1, struct vector v2)
-float scalar_product(struct vector v1, struct vector v2)
+double scalar_product(struct vector v1, struct vector v2)
 struct vector vectorial_product(struct vector v1, struct vector v2)

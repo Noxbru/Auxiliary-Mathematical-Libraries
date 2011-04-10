@@ -10,17 +10,17 @@
 
 struct complex_polar
 {
-    float module, argument;
+    double module, argument;
 };
 
 /* Creates a complex number in polar form with
  * module=a and argument=b
  * Note that argument goes from -PI to +PI      */
-struct complex_polar create_complex_polar(float a, float b)
+struct complex_polar create_complex_polar(double a, double b)
 {
     if(a==0)
         printf("WARNING: CREATING A 0 length complex number\n");
-    if(b<-M_PI||b>M_PI) //CHECK!
+    if(b<-M_PI||b>M_PI) //CHECK! STUDY A CHECK ARGUMENT FUNCTION!
         b=fmod(b,M_PI);
 
     struct complex_polar z;
@@ -35,7 +35,7 @@ struct complex_polar create_complex_polar(float a, float b)
  * to give the correct argument                 */
 struct complex_polar get_complex(void)
 {
-    float a,b;
+    double a,b;
     printf("Enter module\n");
     scanf("%f",&a);
     printf("Enter argument\n");
@@ -119,28 +119,28 @@ struct complex_polar division_complex_polar(struct complex_polar z1, struct comp
 
 /* Returns the real part of a complex number
  * in polar form                            */
-float real_part_polar(struct complex_polar z)
+double real_part_polar(struct complex_polar z)
 {
     return z.module*cos(z.argument);
 }
 
 /* Returns the imaginary part of a complex number
  * in polar form                                 */
-float imaginary_part_polar(struct complex_polar z)
+double imaginary_part_polar(struct complex_polar z)
 {
     return z.module*sin(z.argument);
 }
 
 /* Returns the module of a complex number
  * in polar form                            */
-float module_polar(struct complex_polar z)
+double module_polar(struct complex_polar z)
 {
     return z.module;
 }
 
 /* Returns the argument of a complex number
  * in polar form                            */
-float argument_polar(struct complex_polar z)
+double argument_polar(struct complex_polar z)
 {
     return z.argument;
 }
@@ -167,7 +167,7 @@ struct complex_polar reciprocal_polar(struct complex_polar z)
 
 /* Multiply a complex number in polar form by
  * a scalar                                      */
-struct complex_binary multiply_complex_polar_by(struct complex_polar z, float n)
+struct complex_binary multiply_complex_polar_by(struct complex_polar z, double n)
 {
     struct complex_polar c;
     c.module=z.module*n

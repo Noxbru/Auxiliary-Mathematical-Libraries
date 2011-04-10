@@ -20,7 +20,7 @@
 
 struct vector
 {
-    float *vec;
+    double *vec;
     unsigned int dimension;
 };
 
@@ -30,7 +30,7 @@ struct vector create_vector(unsigned int n)
 {
     struct vector v;
     v.dimension=n;
-    v.vec=malloc(n*sizeof(float));
+    v.vec=malloc(n*sizeof(double));
     return v;
 }
 
@@ -82,7 +82,7 @@ struct vector vector_from_string(char *c, unsigned int n)
 }
 
 /* This function is used to create a vector from an array */
-struct vector vector_from_array(float *a, unsigned int n)
+struct vector vector_from_array(double *a, unsigned int n)
 {
     struct vector v=create_vector(n);
     unsigned int i;
@@ -168,8 +168,8 @@ void print_vector_to_file(char *c, struct vector v, char over)
     printf(")\n");
 }
 
-/* This function fills a vector with a float */
-void fill_vector_with(struct vector v, float n)
+/* This function fills a vector with a double */
+void fill_vector_with(struct vector v, double n)
 {
     unsigned int i;
     for (i = 0; i < v.dimension; i++)
@@ -177,7 +177,7 @@ void fill_vector_with(struct vector v, float n)
 }
 
 /* This function returns the vector multiplied by n */
-struct vector multiply_vector_by(struct vector v, float n)
+struct vector multiply_vector_by(struct vector v, double n)
 {
     unsigned int i;
     struct vector w=create_vector(v.dimension);
@@ -187,11 +187,11 @@ struct vector multiply_vector_by(struct vector v, float n)
 }
 
 /* This function returns the module of the vector   */
-/* Warning, can overflow the auxiliar float         */
-float module(struct vector v)
+/* Warning, can overflow the auxiliar double         */
+double module(struct vector v)
 {
     unsigned int i;
-    float aux=0;
+    double aux=0;
     for (i = 0; i < v.dimension; i++)
         aux+=v.vec[i]*v.vec[i];
     return sqrt(aux);
@@ -200,11 +200,11 @@ float module(struct vector v)
 /* Alternative code for the module function
  * is slower but safer with big components  */
 /*
-float module(struct vector v)
+double module(struct vector v)
 {
-    float aux=max_component(v);
-    float aux2=aux*aux;
-    float mod=0;
+    double aux=max_component(v);
+    double aux2=aux*aux;
+    double mod=0;
     unsigned int i;
     for (i = 0; i < v.dimension; i++)
         mod+=v.vec[i]*v.vec[i]/aux2;
@@ -216,7 +216,7 @@ float module(struct vector v)
  * an input vector                               */
 struct vector unitary_vector(struct vector v)
 {
-    float aux=module(v);
+    double aux=module(v);
     if(aux==1)
         return copy_vector(v);
     struct vector w=create_vector(v.dimension);
@@ -228,10 +228,10 @@ struct vector unitary_vector(struct vector v)
 
 /* This function returns the maximum component
  * of the vector                                */
-float max_component(struct vector v)
+double max_component(struct vector v)
 {
     unsigned int i;
-    float aux;
+    double aux;
     for (i = 0; i < v.dimension; i++)
         if(v.vec[i]>aux)
             aux=v.vec[i];
@@ -240,10 +240,10 @@ float max_component(struct vector v)
 
 /* This function returns the minimum component
  * of the vector                                */
-float min_component(struct vector v)
+double min_component(struct vector v)
 {
     unsigned int i;
-    float aux;
+    double aux;
     for (i = 0; i < v.dimension; i++)
         if(v.vec[i]<aux)
             aux=v.vec[i];
@@ -300,7 +300,7 @@ int check_parallel(struct vector v1, struct vector v2)
     }
 
     unsigned int i;
-    float aux=v1[0]/v2[0];
+    double aux=v1[0]/v2[0];
     for (i = 1; i < v1.dimension; i++)
         if(v1[i]/v2[i]!=aux)
             return 0;
@@ -349,7 +349,7 @@ struct vector vector_subtraction(struct vector v1, struct vector v2)
 /* This function returns the scalar product of two
  * vectors
  * returns -1 if scalar product can't be calculated */
-float scalar_product(struct vector v1, struct vector v2)
+double scalar_product(struct vector v1, struct vector v2)
 {
     if(v1.lenght!=v2.dimension)
     {
@@ -359,7 +359,7 @@ float scalar_product(struct vector v1, struct vector v2)
     }
 
     unsigned int i;
-    float a=0;
+    double a=0;
     for (i = 0; i < v1.dimension; i++)
         a+=v1.vec[i]*v2.vec[i];
     return a;
@@ -395,7 +395,7 @@ struct vector projection_along(struct vector v1, struct vector v2)
     }
 
     struct vector w=unitary_vector(v1);
-    float aux=scalar_product(v1,v2)/module(v1);
+    double aux=scalar_product(v1,v2)/module(v1);
     w=multiply_vector_by(v1,aux);
     return w;
 }
