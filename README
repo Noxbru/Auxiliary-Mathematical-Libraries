@@ -1,10 +1,11 @@
 These are some of the mathematical libraries
 I use when I program in C. So far, we have the
 following:
-    2 Libraries for using complex numbers
+    2 Libraries for using Complex Numbers
         1 for complex in binary form
         1 for complex in polar form
-    1 Library for using matrixes
+    1 Library for using Distributions
+    1 Library for using Matrices
     1 Library with extra functions for matrixes
         that involve Vectors
     1 Library for using Vectors
