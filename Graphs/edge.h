@@ -26,7 +26,9 @@ struct edge_list
     unsigned int n_edges;
 };
 
-void add_edge(struct edge_list * list, struct edge * edg)
+/* Adds an edge to a list
+ * If the list is empty it is created   */
+void add_edge(struct edge_list *list, struct edge *edg)
 {
     if(list->first==NULL)
     {
@@ -51,13 +53,21 @@ void add_edge(struct edge_list * list, struct edge * edg)
     list->n_edges++;
 }
 
-int check_end(struct edge * edg, struct node * nod)
+/* Checks if the node nod is in one of the
+ * ends of the edge edg.
+ * Returns 1 if it is
+ * Returns 0 if it isn't                    */
+int check_end(struct edge *edg, struct node *nod)
 {
     if(nod==edg->a||nod==edg->b)
         return 1;
     return 0;
 }
 
+/* Checks if the node nod is in the
+ * neighbour list
+ * Returns 1 if it is
+ * Returns 0 if it isn't                    */
 int check_neighbour(struct edge_list * list, struct node * nod)
 {
     if(list->first==NULL)

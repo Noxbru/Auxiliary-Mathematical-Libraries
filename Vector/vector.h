@@ -116,6 +116,7 @@ struct vector vector_from_file(char *c, unsigned int n)
             printf("Problems creating vector\n");
             printf("It couldn't be totally filled\n");
             printf("Filled untill %u\n",i+1);
+            fclose(f);
             return v;
         }
     if(!feof(f))
@@ -123,6 +124,7 @@ struct vector vector_from_file(char *c, unsigned int n)
         printf("There are still numbers in the file\n");
         printf("that couldn't be written in the vector\n");
     }
+    fclose(f);
     return v;
 }
 

@@ -193,6 +193,10 @@ struct graph create_barabasi_albert_graph(unsigned int m0, unsigned int times, u
     return g;
 }
 
+/* Prints the graph to a file that can be
+ * converted to a image using the dot program
+ * from the graphviz software
+ * http://www.graphviz.org/                     */
 void graph_to_dot_file(char *c, struct graph g, char over)
 {
     FILE *f;
@@ -213,6 +217,7 @@ void graph_to_dot_file(char *c, struct graph g, char over)
     fclose(f);
 }
 
+/* Prints a graph to a file */
 void graph_to_file(char *c, struct graph g, char over)
 {
     FILE *f;

@@ -15,6 +15,7 @@ struct node
     unsigned int n_neighbours;
 };
 
+/* Connect two nodes using an edge */
 void connect(struct node * nod1, struct node * nod2, struct edge * edg)
 {
     struct edge_list *list;

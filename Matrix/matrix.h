@@ -115,6 +115,7 @@ struct matrix matrix_from_file(char *c, unsigned int m, unsigned int n)
                 printf("Problems creating matrix\n");
                 printf("It couldn't be totally filled\n");
                 printf("Filled untill %u,%u\n",i+1,j+1);
+                fclose(f);
                 return a;
             }
     if(!feof(f))
@@ -122,6 +123,7 @@ struct matrix matrix_from_file(char *c, unsigned int m, unsigned int n)
         printf("There are still numbers in the file\n");
         printf("that couldn't be written in the matrix\n");
     }
+    fclose(f);
     return a;
 }
 
@@ -180,6 +182,7 @@ void print_matrix_to_file(char *c, struct matrix m, char over)
             fprintf(f,"%f\t",m.mat[i][j]);
         fprintf(f,"\n");
     }
+    fclose(f);
 }
 
 /* This function checks if a matrix is symmetric
