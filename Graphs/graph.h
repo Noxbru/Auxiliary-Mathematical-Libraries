@@ -167,10 +167,18 @@ struct graph create_barabasi_albert_graph(unsigned int m0, unsigned int times, u
                  * we have to choose the node
                  * according to the number of neighbours
                  * it has                               */
-                i=(unsigned int)rand()%(2*(k-j));
-                for (l = 0; l < m0 && i>0; l++)
-                    if((i-=g.nodes[l].n_neighbours)<=0)
+                i=(unsigned int)rand()%(2*(k-j)+j);
+                for (l = 0; l < m0 && i>=0; l++)
+                {
+                    if(i<g.nodes[l].n_neighbours)
+                    {
                         aux2=&g.nodes[l];
+                        i-=g.nodes[l].n_neighbours;
+                        break;
+                    }
+                    else
+                        i-=g.nodes[l].n_neighbours;
+                }
             }
             aux1=&g.nodes[m0];
             aux3=&g.edges[k];
@@ -235,4 +243,27 @@ void graph_to_file(char *c, struct graph g, char over)
         fprintf(f, "%d\t%d\n",g.edges[i].a->id,g.edges[i].b->id);
     }
     fclose(f);
+}
+
+unsigned int max_neighbours(struct graph g)
+{
+    unsigned int i;
+    unsigned int aux=0;
+
+    for (i = 0; i < g.n_nodes; i++)
+        if(g.nodes[i].n_neighbours>aux)
+            aux=g.nodes[i].n_neighbours;
+    return aux;
+}
+
+unsigned int * grade_distribution(struct graph g)
+{
+    unsigned int *dist;
+    dist=malloc((max_neighbours(g)+1)*sizeof(unsigned int));
+
+    unsigned int i;
+    for (i = 0; i < g.n_nodes; i++)
+        dist[g.nodes[i].n_neighbours]++;
+
+    return dist;
 }
