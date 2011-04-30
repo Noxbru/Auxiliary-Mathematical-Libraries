@@ -1,0 +1,39 @@
+/* This is a library to use graphs in C
+ * written by Bruno Jiménez
+ * under the Catware licence && GPL licence
+ * More info of the Catware licence can be
+ * found here: http://lists.debian.org/debian-devel/1999/01/msg01921.html
+ * but it says that if you find this code useful
+ * you should pay for it petting some cats
+ * Any request or bug or anything of the code
+ * please, contact brunojimen(at)gmail(dot)com
+ */
+
+ The graphs are structures with this shape:
+A pointer to an array of nodes and a pointer to
+an array of edges, and the total number of nodes
+and edges
+
+struct graph
+{
+    struct node *nodes;
+    struct edge *edges;
+    unsigned int n_nodes, n_edges;
+};
+
+So far, we have implemented the followinf functions:
+
+=== Functions to create graphs ===
+
+struct graph create_erdos_renyi_graph(unsigned int nods, unsigned int edgs)
+struct graph create_barabasi_albert_graph(unsigned int m0, unsigned int times, unsigned int m, unsigned int pref_at)
+
+=== Functions to print graphs ===
+
+void graph_to_dot_file(char *c, struct graph g, char over)
+void graph_to_file(char *c, struct graph g, char over)
+
+=== Functions to analize a graph ===
+
+unsigned int max_neighbours(struct graph g)
+unsigned int * grade_distribution(struct graph g)

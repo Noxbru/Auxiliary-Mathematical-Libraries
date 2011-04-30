@@ -5,6 +5,7 @@ following:
         1 for complex in binary form
         1 for complex in polar form
     1 Library for using Distributions
+    1 Library for using Graphs
     1 Library for using Matrices
     1 Library with extra functions for matrixes
         that involve Vectors
