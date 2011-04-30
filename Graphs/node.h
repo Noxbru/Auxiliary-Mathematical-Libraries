@@ -23,9 +23,6 @@ void connect(struct node * nod1, struct node * nod2, struct edge * edg)
 
     if(!check_neighbour(list,nod2))
     {
-        struct edge aux, *ed;
-        ed=&aux;
-
         edg->a=nod1;
         edg->b=nod2;
         add_edge(list,edg);

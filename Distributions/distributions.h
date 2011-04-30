@@ -81,8 +81,8 @@ double gauss(double x, double mean, double sigma2)
     double aux=(x-mean)*(x-mean);
     aux/=(2*sigma2);
     aux=exp(-aux);
-    aux/=sqrt(2*MATH_PI*sigma2);
-    return aux
+    aux/=sqrt(2*M_PI*sigma2);
+    return aux;
 }
 
 /* Returns the probability of being the x event

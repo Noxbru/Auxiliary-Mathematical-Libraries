@@ -167,13 +167,12 @@ struct graph create_barabasi_albert_graph(unsigned int m0, unsigned int times, u
                  * we have to choose the node
                  * according to the number of neighbours
                  * it has                               */
-                i=(unsigned int)rand()%(2*(k-j)+j);
+                i=(unsigned int)rand()%(2*k-j);
                 for (l = 0; l < m0 && i>=0; l++)
                 {
                     if(i<g.nodes[l].n_neighbours)
                     {
                         aux2=&g.nodes[l];
-                        i-=g.nodes[l].n_neighbours;
                         break;
                     }
                     else
