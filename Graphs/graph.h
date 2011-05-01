@@ -266,3 +266,13 @@ unsigned int * grade_distribution(struct graph g)
 
     return dist;
 }
+
+void free_graph(struct graph *g)
+{
+    unsigned int i;
+
+    for (i = 0; i < g->n_nodes; i++)
+        free_list(&(g->nodes[i].edges));
+    free(g->edges);
+    free(g->nodes);
+}

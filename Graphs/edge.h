@@ -81,3 +81,25 @@ int check_neighbour(struct edge_list * list, struct node * nod)
     while ((aux=aux->next)!=NULL);
     return 0;
 }
+
+void free_list(struct edge_list *list)
+{
+    if(list->first==NULL)
+        return;
+
+    struct edge_list_node *aux, *aux2;
+    do
+    {
+        aux=list->first;
+        while (aux->next!=NULL)
+        {
+            aux2=aux;
+            aux=aux->next;
+        }
+        free(aux2->next);
+        aux2->next=NULL;
+    }
+    while (list->first->next!=NULL);
+
+    free(list->first);
+}
