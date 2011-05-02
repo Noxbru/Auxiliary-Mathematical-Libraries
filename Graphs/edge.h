@@ -88,7 +88,7 @@ void free_list(struct edge_list *list)
         return;
 
     struct edge_list_node *aux, *aux2;
-    do
+    while (list->first->next!=NULL)
     {
         aux=list->first;
         while (aux->next!=NULL)
@@ -99,7 +99,6 @@ void free_list(struct edge_list *list)
         free(aux2->next);
         aux2->next=NULL;
     }
-    while (list->first->next!=NULL);
 
     free(list->first);
 }
