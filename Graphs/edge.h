@@ -19,7 +19,7 @@ struct edge
 
 struct edge_list_node
 {
-    struct *ed;
+    struct edge *ed;
     struct edge_list_node *next;
     struct edge_list_node *back;
 };
