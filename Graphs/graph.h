@@ -55,6 +55,7 @@ struct graph create_erdos_renyi_graph(unsigned int nods, unsigned int edgs)
     for (i = 0; i < g.n_nodes; i++)
     {
         struct node *aux_nod;
+        aux_nod=malloc(sizeof(struct node));
         aux_nod->id=i;
         initialize_edge_list(&(aux_nod->edges));
         aux_nod->n_neighbours=0;
@@ -76,14 +77,19 @@ struct graph create_erdos_renyi_graph(unsigned int nods, unsigned int edgs)
         while (i==j);
 
         struct edge *aux_edg;
+        aux_edg=malloc(sizeof(struct edge));
         connect(nod_ar_aux[i],nod_ar_aux[j],aux_edg);
-        add_edge(&(g.edges),aux_edg);
 
         /* If the edge already existed, both
          * of the ends of the were to be
          * edge are NULL                    */
         if(aux_edg->a!=NULL)
+        {
+            add_edge(&(g.edges),aux_edg);
             edgs--;
+        }
+        else
+            free(aux_edg);
     }
 
     free(nod_ar_aux);
@@ -99,7 +105,7 @@ struct graph create_barabasi_albert_graph(unsigned int m0, unsigned int times, u
     srand(time(NULL));
     struct graph g;
     struct node **nod_ar_aux;
-    nod_ar_aux=malloc(nods*sizeof(struct node *));
+    nod_ar_aux=malloc((m0+times)*sizeof(struct node *));
     unsigned int i,j,k,l;
 
     /* As we know how many nodes will be added, and how
@@ -107,6 +113,9 @@ struct graph create_barabasi_albert_graph(unsigned int m0, unsigned int times, u
      * the total number of nodes and edges at the end   */
     g.n_nodes=m0+times;
     g.n_edges=m0*(m0-1)/2+m*times;
+
+    initialize_node_list(&(g.nodes));
+    initialize_edge_list(&(g.edges));
 
     /* The nodes are initiated with its id, the
      * list of neighbours is initiated as NULL
@@ -116,6 +125,7 @@ struct graph create_barabasi_albert_graph(unsigned int m0, unsigned int times, u
     for (i = 0; i < g.n_nodes; i++)
     {
         struct node *aux_nod;
+        aux_nod=malloc(sizeof(struct node));
         aux_nod->id=i;
         initialize_edge_list(&(aux_nod->edges));
         aux_nod->n_neighbours=0;
@@ -129,6 +139,7 @@ struct graph create_barabasi_albert_graph(unsigned int m0, unsigned int times, u
         for (j = i+1; j < m0; j++)
         {
             struct edge *aux_edg;
+            aux_edg=malloc(sizeof(struct edge));
             connect(nod_ar_aux[i],nod_ar_aux[j],aux_edg);
             add_edge(&(g.edges),aux_edg);
             k++;
@@ -155,27 +166,30 @@ struct graph create_barabasi_albert_graph(unsigned int m0, unsigned int times, u
                 i=(unsigned int)rand()%(2*k-j);
                 for (l = 0; l < m0 && i>=0; l++)
                 {
-                    if(i<nod_ar_aux[l].n_neighbours)
+                    if(i<nod_ar_aux[l]->n_neighbours)
                     {
                         i=l;
                         break;
                     }
                     else
-                        i-=nod_ar_aux[l].n_neighbours;
+                        i-=nod_ar_aux[l]->n_neighbours;
                 }
             }
             struct edge *aux_edg;
-            connect(nod_ar_aux[m0],nod_ar_aux[j],aux_edg);
-            add_edge(&(g.edges),aux_edg);
+            aux_edg=malloc(sizeof(struct edge));
+            connect(nod_ar_aux[m0],nod_ar_aux[i],aux_edg);
 
             /* If the edge already existed, both
              * of the ends of the were to be
              * edge are NULL                    */
-            if(aux3->a!=NULL)
+            if(aux_edg->a!=NULL)
             {
                 j++;
                 k++;
+                add_edge(&(g.edges),aux_edg);
             }
+            else
+                free(aux_edg);
         }
         while (j<m);
         m0++;
@@ -208,7 +222,7 @@ void graph_to_dot_file(char *c, struct graph g, char over)
     fprintf(f, "digraph G \{\n");
     do
     {
-        fprintf(f, "\t%d -> %d;\n",aux->edg->a->id,aux->edg->b->id);
+        fprintf(f, "\t%d -> %d;\n",aux->ed->a->id,aux->ed->b->id);
         aux=aux->next;
     }
     while (aux->next!=NULL);
@@ -235,7 +249,7 @@ void graph_to_file(char *c, struct graph g, char over)
     fprintf(f, "Target\tSource\n");
     do
     {
-        fprintf(f, "%d\t%d\n",aux->edg->a->id,aux->edg->b->id);
+        fprintf(f, "%d\t%d\n",aux->ed->a->id,aux->ed->b->id);
         aux=aux->next;
     }
     while (aux->next!=NULL);
@@ -281,11 +295,11 @@ void free_graph(struct graph *g)
     aux_nod=g->nodes.first;
     do
     {
-        free_edge_list(&(aux_nod->nod.edges));
+        free_edge_list(&(aux_nod->nod->edges));
         aux_nod=aux_nod->next;
     }
     while (aux_nod->next!=NULL);
 
-    free_edge_list(g->edges);
-    free_node_list(g->nodes);
+    free_edge_list(&(g->edges));
+    free_node_list(&(g->nodes));
 }

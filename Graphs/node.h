@@ -28,8 +28,8 @@ struct node_list_node
 
 struct node_list
 {
-    struct node_list *first;
-    struct node_list *last;
+    struct node_list_node *first;
+    struct node_list_node *last;
     unsigned int length;
 };
 

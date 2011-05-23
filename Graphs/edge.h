@@ -115,11 +115,11 @@ int check_neighbour(struct edge_list *list, struct node *nod)
 
         do
         {
-            if(check_end(aux->ed,nod)
+            if(check_end(aux->ed,nod))
                 return 1;
             aux=aux->next;
         }
         while(aux!=NULL);
-        return -1;
+        return 0;
     }
 }
