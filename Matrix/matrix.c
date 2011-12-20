@@ -181,6 +181,17 @@ void print_matrix_to_file(char *c, struct matrix m, char over)
     fclose(f);
 }
 
+/* This function frees the memory used by
+ * a matrix                                 */
+void free_matrix(struct matrix *m)
+{
+    unsigned i;
+    for(i = 0; i < m->rows; i++)
+        free(m->mat[i]);
+    free(m->mat);
+    free(m);
+}
+
 /* This function checks if a matrix is symmetric
  * returns -1 if it can't be checked
  * returns  0 if it isn't symmetric

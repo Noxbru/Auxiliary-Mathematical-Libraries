@@ -86,7 +86,7 @@ struct vector multiply_matrix_from_left(struct matrix m, struct vector v)
     unsigned int i,j;
     for (i = 0; i < m.columns; i++)
         for (j = 0; j < m.rows; j++)
-            v1.vec[i]+=v1.vec[j]*m.mat[i][j];
+            v1.vec[i]+=v.vec[j]*m.mat[j][i];
     return v1;
 }
 
@@ -109,7 +109,7 @@ struct vector multiply_matrix_from_right(struct matrix m, struct vector v)
     unsigned int i,j;
     for (i = 0; i < m.rows; i++)
         for (j = 0; j < m.columns; j++)
-            v1.vec[i]+=v1.vec[j]*m.mat[i][j];
+            v1.vec[i]+=v.vec[j]*m.mat[i][j];
     return v1;
 }
 
