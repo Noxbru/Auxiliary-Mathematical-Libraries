@@ -25,6 +25,9 @@ struct matrix identity_matrix(unsigned int n);
 void print_matrix(struct matrix m);
 void print_matrix_to_file(char *c, struct matrix m, char over);
 
+/* Functions to destroy matrices */
+void free_matrix(struct matrix *m);
+
 /* Functions to check types of matrixes */
 int check_symmetric(struct matrix m);
 int check_antisymmetric(struct matrix m);
