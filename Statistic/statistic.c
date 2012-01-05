@@ -54,6 +54,19 @@ double variance(double *a, unsigned int n)
     return mean2-mean*mean;
 }
 
+/* This function is a safer version of the
+ * variance function based on the Algorithm II
+ * of wikipedia                                 */
+double variance_safe(double *a, unsigned int n)
+{
+    double mean_temp=mean(a,n);
+    double variance=0;
+    unsigned int i;
+    for(i = 0; i < n; i++)
+        variance+=(a[i]-mean_temp)*(a[i]-mean_temp);
+    return variance/n;
+}
+
 /* This function returns the covariance of
  * two arrays of n data  <ab>-<a><b>        */
 double covariance(double *a, double *b, unsigned int n)
@@ -61,6 +74,7 @@ double covariance(double *a, double *b, unsigned int n)
     double mean_a=0;
     double mean_b=0;
     double mean_ab=0;
+    unsigned int i;
     for(i = 0; i < n; i++)
     {
         mean_a+=a[i];
@@ -71,4 +85,18 @@ double covariance(double *a, double *b, unsigned int n)
     mean_b/=n;
     mean_ab/=n;
     return mean_ab-mean_a*mean_b;
+}
+
+/* This function is a safer version of the
+ * covariance function based on the
+ * Algorithm II of wikipedia                */
+double covariance_safe(double *a, double *b, unsigned int n)
+{
+    double mean_a=mean(a,n);
+    double mean_b=mean(b,n);
+    double covariance=0;
+    unsigned int i;
+    for(i = 0; i < n; i++)
+        covariance+=(a[i]-mean_a)*(b[i]-mean_b);
+    return covariance/n;
 }

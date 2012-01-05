@@ -15,6 +15,8 @@
 double mean(double *a, unsigned int n)
 double mean2(double *a, unsigned int n)
 double variance(double *a, unsigned int n)
+double variance_safe(double *a, unsigned int n)
 double covariance(double *a, double *b, unsigned int n)
+double covariance_safe(double *a, double *b, unsigned int n)
 
 #endif
