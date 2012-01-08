@@ -1,4 +1,4 @@
-/* This is a library to use matrixes in C
+/* This is a library to use matrices in C
  * written by Bruno Jiménez
  * under the Catware licence && GPL licence
  * More info of the Catware licence can be
@@ -9,7 +9,7 @@
  * please, contact brunojimen(at)gmail(dot)com
  */
 
-The matrixes are structures with this shape:
+The matrices are structures with this shape:
 A pointer to an array of pointers to arrays of doubles
 (the rows of the matrix) and two unsigned integers
 which are the number of rows and columns of the matrix
@@ -22,25 +22,25 @@ struct matrix
 
 So far, we have implemented the following functions:
 
-=== Functions to create matrixes ===
+=== Functions to create matrices ===
 
 struct matrix create_matrix(unsigned int m, unsigned int n)
 struct matrix get_matrix()
 struct matrix matrix_from_string(char *c, unsigned int m, unsigned int n)
-struct matrxi matrix_from_file(char *c, unsigned int m, unsigned int n)
+struct matrix matrix_from_file(char *c, unsigned int m, unsigned int n)
 struct matrix copy_matrix(struct matrix m)
 struct matrix identity_matrix(unsigned int n)
 
-=== Functions to print matrixes ===
+=== Functions to print matrices ===
 
 void print_matrix(struct matrix m)
-void print_matrix_to_file(char *c, struct matrix m, char over)
+void print_matrix_to_file(char *c, struct matrix m, char over=1)
 
-=== Functions to check types of matrixes ===
+=== Functions to check types of matrices ===
 
-int check_symmetric(struct matrix m)
-int check_antisymmetric(struct matrix m)
-int check_orthogonal(struct matrix m)
+int is_symmetric(struct matrix m)
+int is_antisymmetric(struct matrix m)
+int is_orthogonal(struct matrix m)
 int compare_matrix(struct matrix m1, struct matrix m2)
 
 === Functions to do operations on one single matrix ===
@@ -72,7 +72,7 @@ double determinant(struct matrix m)
 double sarrus(struct matrix m)
 double determinant_laplace(struct matrix m)
 
-=== Functions to do operations with two matrixes ===
+=== Functions to do operations with two matrices ===
 
 struct matrix matrix_sum(struct matrix m1, struct matrix m2)
 struct matrix matrix_subtraction(struct matrix m1, struct matrix m2)
@@ -83,7 +83,7 @@ struct matrix gauss_elimination(struct matrix m,struct matrix n)
 
 ====================================================
 
-Extra functions to work with matrixes and vectors
+Extra functions to work with matrices and vectors
 
 struct matrix row_matrix_from_vector(struct vector v)
 struct matrix column_matrix_from_vector(struct vector v)

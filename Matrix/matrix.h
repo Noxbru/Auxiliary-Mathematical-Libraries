@@ -17,21 +17,21 @@ struct matrix;
 struct matrix create_matrix(unsigned int m, unsigned int n);
 struct matrix get_matrix();
 struct matrix matrix_from_string(char *c, unsigned int m, unsigned int n);
-struct matrxi matrix_from_file(char *c, unsigned int m, unsigned int n);
+struct matrix matrix_from_file(char *c, unsigned int m, unsigned int n);
 struct matrix copy_matrix(struct matrix m);
 struct matrix identity_matrix(unsigned int n);
 
 /* Functions to print matrixes */
 void print_matrix(struct matrix m);
-void print_matrix_to_file(char *c, struct matrix m, char over);
+void print_matrix_to_file(char *c, struct matrix m, char over=1);
 
 /* Functions to destroy matrices */
 void free_matrix(struct matrix *m);
 
 /* Functions to check types of matrixes */
-int check_symmetric(struct matrix m);
-int check_antisymmetric(struct matrix m);
-int check_orthogonal(struct matrix m);
+int is_symmetric(struct matrix m);
+int is_antisymmetric(struct matrix m);
+int is_orthogonal(struct matrix m);
 int compare_matrix(struct matrix m1, struct matrix m2);
 
 /* Functions to do operations on one single matrix */
@@ -67,6 +67,6 @@ struct matrix matrix_sum(struct matrix m1, struct matrix m2);
 struct matrix matrix_subtraction(struct matrix m1, struct matrix m2);
 struct matrix matrix_multiplication(struct matrix m1, struct matrix m2);
 
-struct matrix gauss_elimination(struct matrix m,struct matrix n);
+struct matrix gauss_elimination(struct matrix m, struct matrix n);
 
 #endif

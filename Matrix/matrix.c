@@ -160,8 +160,9 @@ void print_matrix(struct matrix m)
  * named as the string that c points to
  * If the file doesn't exist it is created
  * The third parameter is whether you want to
- * override the contents of the file or not     */
-void print_matrix_to_file(char *c, struct matrix m, char over)
+ * override the contents of the file or not
+ * by default, it overrides them                */
+void print_matrix_to_file(char *c, struct matrix m, char over=1)
 {
     FILE *f;
     if(over==0)
@@ -196,7 +197,7 @@ void free_matrix(struct matrix *m)
  * returns -1 if it can't be checked
  * returns  0 if it isn't symmetric
  * returns  1 if it is symmetric                */
-int check_symmetric(struct matrix m)
+int is_symmetric(struct matrix m)
 {
     if(m.rows!=m.columns)
     {
@@ -216,7 +217,7 @@ int check_symmetric(struct matrix m)
  * returns -1 if it can't be checked
  * returns  0 if it isn't anti-symmetric
  * returns  1 if it is anti-symmetric                  */
-int check_antisymmetric(struct matrix m)
+int is_antisymmetric(struct matrix m)
 {
     if(m.rows!=m.columns)
     {
@@ -236,7 +237,7 @@ int check_antisymmetric(struct matrix m)
  * returns -1 if it can't be checked
  * returns 0 if it isn't orthogonal
  * returns 1 if it is orthogonal                */
-int check_orthogonal(struct matrix m)
+int is_orthogonal(struct matrix m)
 {
     if(m.rows!=m.columns)
     {
@@ -252,7 +253,7 @@ int check_orthogonal(struct matrix m)
 /* alternative code for the check_orthogonal function
  * still in development
 
-int check_orthogonal(struct matrix m)
+int is_orthogonal(struct matrix m)
 {
     if(m.rows!=m.columns)
     {

@@ -7,8 +7,9 @@ following:
     1 Library for using Distributions
     1 Library for using Graphs
     1 Library for using Matrices
-    1 Library with extra functions for matrixes
+    1 Library with extra functions for matrices
         that involve Vectors
+    1 Library with some basic statistic
     1 Library for using Vectors
 All of them are released under the Catware license
 and the GPL license.

@@ -56,7 +56,7 @@ double variance(double *a, unsigned int n)
 
 /* This function is a safer version of the
  * variance function based on the Algorithm II
- * of wikipedia                                 */
+ * of wikipedia (sum of (a_i-<a>)²)             */
 double variance_safe(double *a, unsigned int n)
 {
     double mean_temp=mean(a,n);
@@ -89,7 +89,7 @@ double covariance(double *a, double *b, unsigned int n)
 
 /* This function is a safer version of the
  * covariance function based on the
- * Algorithm II of wikipedia                */
+ * of wikipedia (sum of (a_i-<a>)*(b_i-<b>) */
 double covariance_safe(double *a, double *b, unsigned int n)
 {
     double mean_a=mean(a,n);
