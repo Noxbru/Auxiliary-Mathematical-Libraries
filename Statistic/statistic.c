@@ -100,3 +100,71 @@ double covariance_safe(double *a, double *b, unsigned int n)
         covariance+=(a[i]-mean_a)*(b[i]-mean_b);
     return covariance/n;
 }
+
+/* This function fits two sets of
+ * data to a straight line a*x+b
+ * using that
+ * a = <xy>-<x><y>/<x²>-<x>²
+ * b = <y>-a<x>                     */
+/* Warning, this may is an unsafe
+ * function as it uses the unsafe
+ * version of the variance and
+ * covariance                       */
+void fit_linear(double *x, double *y, unsigned int n, double *a, double *b)
+{
+    *a=covariance(x,y,n)/variance(x,n);
+    *b=mean(y,n)-*a*mean(x,n);
+}
+/* ALTERNATIVE CODE (maybe a bit faster)
+{
+    double mean_x=0, mean_y=0;
+    double mean_xx=0, mean_xy=0;
+    unsigned int i;
+
+    for(i = 0; i < n; i++)
+    {
+        mean_x+=x[i];
+        mean_y+=y[i];
+        mean_xx+=x[i]*x[i];
+        mean_xy+=x[i]*y[i];
+    }
+
+    *a=(mean_xy-mean_x*mean_y/n)/(mean_xx-mean_x*mean_x/n);
+    *b=(mean_y-*a*mean_x)/n;
+}
+*/
+
+/* This function is the safer version of
+ * the fit_linear function              */
+void fit_linear_safe(double *x, double *y, unsigned int n, double *a, double *b)
+/*{
+    *a=covariance_safe(x,y,n)/variance_safe(x,n);
+    *b=mean(y,n)-*a*mean(x,n);
+}*/
+/* ALTERNATIVE CODE (maybe a bit faster) */
+{
+    double mean_x=0, mean_y=0;
+    double var_x=0, covar_xy=0;
+    unsigned int i;
+
+    for(i = 0; i < n; i++)
+    {
+        mean_x+=x[i];
+        mean_y+=y[i];
+    }
+    mean_x/=n;
+    mean_y/=n;
+
+    for(i = 0; i < n; i++)
+    {
+        var_x+=(x[i]-mean_x)*(x[i]-mean_x);
+        covar_xy+=(x[i]-mean_x)*(y[i]-mean_y);
+    }
+    // Technically var_x and covar_xy aren't the variance
+    // or the covariance of x and xy as they should be
+    // divided by n, but as it will be cancelled we avoid
+    // that operation
+
+    *a=covar_xy/var_x;
+    *b=mean_y-*a*mean_x;
+}

@@ -12,11 +12,14 @@
 #ifndef STATISTIC_H
 #define STATISTIC_H
 
-double mean(double *a, unsigned int n)
-double mean2(double *a, unsigned int n)
-double variance(double *a, unsigned int n)
-double variance_safe(double *a, unsigned int n)
-double covariance(double *a, double *b, unsigned int n)
-double covariance_safe(double *a, double *b, unsigned int n)
+double mean(double *a, unsigned int n);
+double mean2(double *a, unsigned int n);
+double variance(double *a, unsigned int n);
+double variance_safe(double *a, unsigned int n);
+double covariance(double *a, double *b, unsigned int n);
+double covariance_safe(double *a, double *b, unsigned int n);
+
+void fit_linear(double *x, double *y, unsigned int n, double *a, double *b);
+void fit_linear_safe(double *x, double *y, unsigned int n, double *a, double *b);
 
 #endif
