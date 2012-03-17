@@ -250,7 +250,7 @@ int is_orthogonal(struct matrix m)
     return compare_matrix(c,identity_matrix(c.rows));
 }
 
-/* alternative code for the check_orthogonal function
+/* alternative code for the is_orthogonal function
  * still in development
 
 int is_orthogonal(struct matrix m)
@@ -875,13 +875,14 @@ struct matrix gauss_elimination(struct matrix m,struct matrix n)
          * 0 and use it. We change the content in the changes array
          * so we can unchange them later */
         if(c.mat[i][i]==0)
-            for (k = i+1; k < c.rows && c.mat[i][i]==0; k++)
+            for (k = i+1; k < c.rows; k++)
                 if(c.mat[k][i]!=0)
                 {
                     change_rows(c,i,k);
                     change_rows(b,i,k);
                     changes[i]=k;
                     changes[k]=i;
+                    break;
                 }
 
         /* Now that we are sure that the pivot isn't 0, we can
@@ -920,5 +921,6 @@ struct matrix gauss_elimination(struct matrix m,struct matrix n)
                     change_rows(b,i,j);
                     break;
                 }
+    free(changes);
     return b;
 }
