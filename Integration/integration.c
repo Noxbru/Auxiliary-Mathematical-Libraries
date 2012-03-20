@@ -56,7 +56,11 @@ double integration_trapezoidal(double *x, double a, double b, unsigned int n)
  * even, and four if its index is odd,
  * and f(a) and f(b) only one.
  * The error of this method goes as
- * (b-a)/180*h⁴f⁽⁴⁾                     */
+ * (b-a)/180*h⁴f⁽⁴⁾
+ * this is only achieved if n is an odd
+ * number, if it is even the error is
+ * much higher because a final step
+ * integrating with trapeziums          */
 double integration_simpson(double *x, double a, double b, unsigned int n)
 {
     double integral=0;
@@ -73,10 +77,25 @@ double integration_simpson(double *x, double a, double b, unsigned int n)
     // If there's an odd number of points, as in
     // 3, there's a point that isn't added and
     // we have to check for it
-    if(i==n-2) integral+=4*x[i];
+    if(i==n-2)
+    {
+        integral+=4*x[i];
+        integral+=x[n-1];
+        integral*=step/3;
+    }
+    // If there's an even number of points, as in
+    // 4, we can only integrate till n-2 and we
+    // have to add the rest as if it were a
+    // trapezium, so we have to substract the n-2
+    // point, and multiply by h/3 to integrate
+    // till there as Simpson, and add n-2 and n-1
+    // as a trapezium.
+    else if(i==n-1)
+    {
+        integral-=x[n-2];
+        integral*=step/3;
+        integral+=(x[n-2]+x[n-1])*step/2.;
+    }
 
-    integral+=x[0];
-    integral+=x[n-1];
-    integral*=step/3;
     return integral;
 }
