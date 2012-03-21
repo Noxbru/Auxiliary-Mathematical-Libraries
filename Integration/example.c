@@ -16,6 +16,7 @@ int main(int argc, const char *argv[])
     printf("\n");
     printf("Trapezoidal: %.10g\n",4*integration_trapezoidal(values,0,1,number));
     printf("Simpson:     %.10g\n",4*integration_simpson(values,0,1,number));
+    printf("Boole:       %.10g\n",4*integration_boole(values,0,1,number));
     printf("M_PI:        %.10g\n",M_PI);
 
     return 0;

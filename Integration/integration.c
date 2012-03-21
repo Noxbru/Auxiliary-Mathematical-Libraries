@@ -69,6 +69,7 @@ double integration_simpson(double *x, double a, double b, unsigned int n)
     double step=(b-a)/(n-1);
     unsigned int i;
 
+    integral+=x[0];
     for(i = 1; i < n-2; i+=2)
     {
         integral+=4*x[i];
@@ -95,6 +96,83 @@ double integration_simpson(double *x, double a, double b, unsigned int n)
         integral-=x[n-2];
         integral*=step/3;
         integral+=(x[n-2]+x[n-1])*step/2.;
+    }
+
+    return integral;
+}
+
+/* This function computes the integral
+ * of a series of n points of data, x,
+ * from a to b asuming that the values
+ * of x are separated the same step,
+ * h, using Boole rule.
+ * This rule says that
+ * integral from a to b of f(x)
+ * is sum of
+ * h*(7f(x-2h)+32f(x-h)+12f(x)+32f(x+h)+7f(x+2h))2/45
+ * so every point between a and b is
+ * summed thirty-two, twelve or fourteen
+ * times depending on its index, and
+ * f(a) and f(b) only seven.
+ * The error of this method goes as
+ * (b-a)8/945*h⁷f⁽⁶⁾
+ * this is only achieved if n is the
+ * sum of five and a multiply of four,
+ * otherwise we have to finish the
+ * integral using simpson or the
+ * trapezoidal rule                     */
+double integration_boole(double *x, double a, double b, unsigned int n)
+{
+    double integral=0;
+    // Remember that n is the number of points,
+    // not the number of intervals between them
+    double step=(b-a)/(n-1);
+    unsigned int i;
+
+    integral+=7*x[0];
+    for(i = 1; i < n-4; i+=4)
+    {
+        integral+=32*x[i];
+        integral+=12*x[i+1];
+        integral+=32*x[i+2];
+        integral+=14*x[i+3];
+    }
+
+    // Integrating the final points
+    // using Boole's Rule
+    if(i==n-4)
+    {
+        integral+=32*x[i];
+        integral+=12*x[i+1];
+        integral+=32*x[i+2];
+        integral+=7*x[n-1];
+        integral*=2*step/45;
+    }
+    // Integrating the final points
+    // using Simpson's and Trapezoidal
+    // Rule
+    else if(i==n-3)
+    {
+        integral-=7*x[i-1]; 
+        integral*=2*step/45;
+        integral+=(x[i-1]+4*x[i]+x[i+1])*step/3;
+        integral+=(x[i+1]+x[i+2])*step/2.;
+    }
+    // Integrating the final points
+    // using Simpson's Rule
+    else if(i==n-2)
+    {
+        integral-=7*x[i-1]; 
+        integral*=2*step/45;
+        integral+=(x[i-1]+4*x[i]+x[i+1])*step/3;
+    }
+    // Integrating the final points
+    // using the Trapezoidal's Rule
+    else if(i==n-1)
+    {
+        integral-=7*x[i-1]; 
+        integral*=2*step/45;
+        integral+=(x[i-1]+x[i])*step/2.;
     }
 
     return integral;
