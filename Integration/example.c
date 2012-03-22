@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include "integration.c"
+#include "integration.h"
 
 double integrate(double x)
 {
