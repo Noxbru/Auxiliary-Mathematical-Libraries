@@ -177,3 +177,130 @@ double integration_boole(double *x, double a, double b, unsigned int n)
 
     return integral;
 }
+
+/* This function computes the integral
+ * of a function (*function(x)), which
+ * returns a double, from a to b using
+ * n main points and calculating the
+ * function at points separated the
+ * same step, h, using the trapezoidal
+ * rule.
+ * This rule says that
+ * integral from a to b of f(x)
+ * is sum of h*(f(x)+f(x+h))/2
+ * so every point between a and b is
+ * summed two times, and f(a) and f(b)
+ * only one.
+ * The error of this method goes as
+ * (b-a)/12*h²f''                       */
+double integration_function_trapezoidal(double (*function)(double x), double a, double b, unsigned int n)
+{
+    double integral=0;
+    // Remember that n is the number of points,
+    // not the number of intervals between them
+    double step=(b-a)/(n-1);
+    double pos;
+
+    // This for goes until b-step/2 to avoid
+    // summing the final point because of a
+    // loss of precision suming step so many
+    // times
+    for(pos = a+step; pos < b-step/2.; pos+=step)
+        integral+=function(pos);
+
+    integral+=function(a)/2.;
+    integral+=function(b)/2.;
+    integral*=step;
+    return integral;
+}
+
+/* This function computes the integral
+ * of a function (*function(x)), which
+ * returns a double, from a to b using
+ * n main points and calculating the
+ * function at points separated the
+ * same step, h, using simpson rule.
+ * This rule says that
+ * integral from a to b of f(x)
+ * is sum of h*(f(x-h)+4f(x)+f(x+h))/3
+ * so every main point between a and b
+ * is summed two times, the points
+ * between them four times, and f(a)
+ * and f(b) only one.
+ * The error of this method goes as
+ * (b-a)/180*h⁴f⁽⁴⁾
+ * Note that this method really uses
+ * 2n-1 points and evaluations of
+ * the function                         */
+double integration_function_simpson(double (*function)(double x), double a, double b, unsigned int n)
+{
+    double integral=0;
+    // Remember that n is the number of points,
+    // not the number of intervals between them
+    double step=(b-a)/(n-1);
+    double pos;
+
+    integral+=function(a);
+    integral+=4*function(a+step/2);
+    // This for goes until b-step/2 to avoid
+    // summing the final point because of a
+    // loss of precision suming step so many
+    // times
+    for(pos = a+step; pos < b-step/2.; pos+=step)
+    {
+        integral+=2*function(pos);
+        integral+=4*function(pos+step/2);
+    }
+
+    integral+=function(b);
+    integral*=step/6;
+    return integral;
+}
+
+/* This function computes the integral
+ * of a function (*function(x)), which
+ * returns a double, from a to b using
+ * n main points and calculating the
+ * function at points separated the
+ * same step, h, using simpson rule.
+ * This rule says that
+ * integral from a to b of f(x)
+ * h*(7f(x-2h)+32f(x-h)+12f(x)+32f(x+h)+7f(x+2h))2/45
+ * so every main point between a and b
+ * is summed fourteen times, and the
+ * points between them thirty-two or
+ * twelve times, and f(a) and f(b)
+ * only seven.
+ * The error of this method goes as
+ * (b-a)8/945*h⁷f⁽⁶⁾
+ * Note that this method really uses
+ * 4n-3 points and evaluations of
+ * the function                         */
+double integration_function_boole(double (*function)(double x), double a, double b, unsigned int n)
+{
+    double integral=0;
+    // Remember that n is the number of points,
+    // not the number of intervals between them
+    double step=(b-a)/(n-1);
+    double pos;
+
+    integral+=7*function(a);
+    integral+=32*function(a+step/4);
+    integral+=12*function(a+step/2);
+    integral+=32*function(a+step*3/4.);
+    // This for goes until b-step/2 to avoid
+    // summing the final point because of a
+    // loss of precision suming step so many
+    // times
+    for(pos = a+step; pos < b-step/2.; pos+=step)
+    {
+        integral+=14*function(pos);
+        integral+=32*function(pos+step/4);
+        integral+=12*function(pos+step/2);
+        integral+=32*function(pos+step*3/4.);
+    }
+
+    integral+=7*function(b);
+    integral*=step/90;
+    return integral;
+}

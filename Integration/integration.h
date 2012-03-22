@@ -19,4 +19,8 @@ double integration_trapezoidal(double *x, double a, double b, unsigned int n);
 double integration_simpson(double *x, double a, double b, unsigned int n);
 double integration_boole(double *x, double a, double b, unsigned int n);
 
+double integration_function_trapezoidal(double (*function)(double x), double a, double b, unsigned int n);
+double integration_function_simpson(double (*function)(double x), double a, double b, unsigned int n);
+double integration_function_boole(double (*function)(double x), double a, double b, unsigned int n);
+
 #endif
